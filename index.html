@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>transactivate | SBIR Lineage Registry</title>
+    <style>
+        body { font-family: -apple-system, system-ui, sans-serif; background-color: #f4f7f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 500px; text-align: center; border-top: 6px solid #003366; }
+        h1 { color: #003366; margin: 0 0 5px 0; font-size: 24px; letter-spacing: -0.5px; text-transform: lowercase; }
+        .subtitle { color: #666; font-size: 13px; margin-bottom: 30px; line-height: 1.4; }
+        input { width: 100%; padding: 14px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; }
+        button { background-color: #003366; color: white; border: none; padding: 14px; border-radius: 6px; cursor: pointer; font-size: 16px; width: 100%; font-weight: bold; }
+        #result { margin-top: 25px; padding: 25px; border-radius: 6px; display: none; text-align: left; font-size: 14px; border: 1px solid #e2e8f0; background-color: #ffffff; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
+        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; text-transform: uppercase; margin-bottom: 15px; }
+        .gold { background: #fefcbf; color: #b7791f; border: 1px solid #f6e05e; }
+        .silver { background: #edf2f7; color: #4a5568; border: 1px solid #cbd5e0; }
+        .data-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f7fafc; }
+        .data-label { color: #718096; font-weight: 500; }
+        .data-value { color: #2d3748; font-weight: 600; }
+        .footer { margin-top: 40px; font-size: 11px; color: #a0aec0; border-top: 1px solid #edf2f7; padding-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>transactivate</h1>
+    <div class="subtitle">Official Successor-in-Interest Chain of Custody<br>SBIR Lineage Registry</div>
+    
+    <input type="text" id="idInput" placeholder="Enter Record ID (e.g., S-1001)">
+    <button onclick="verify()">Verify Record</button>
+
+    <div id="result"></div>
+    
+    <div class="footer">
+        <b>Regulatory Authority:</b> SBIR Policy Directive § 6(a)(5) & 85 FR 50062.<br>
+        Inquiries: <a href="mailto:admin@transactivate.ai" style="color:#003366;">admin@transactivate.ai</a>
+    </div>
+</div>
+
+<script>
+    // URL Intelligence: Auto-run if ID is in the link
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        if (id) {
+            document.getElementById('idInput').value = id;
+            verify();
+        }
+    };
+
+    async function verify() {
+        const idInput = document.getElementById('idInput').value.trim().toUpperCase();
+        const resDiv = document.getElementById('result');
+        const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS2T0r5LWAPWYjhpWCXhm5O_-G1Cko41wwAbcB5IUcX8EY1AZgXKZH70t9oahorWs7RlAEf3YIITph6/pub?gid=0&single=true&output=csv&cb=" + new Date().getTime();
+
+        if (!idInput) return;
+        resDiv.style.display = "block";
+        resDiv.innerHTML = "Querying Ledger...";
+
+        try {
+            const response = await fetch(sheetUrl);
+            const data = await response.text();
+            const rows = data.split(/\r?\n/).map(row => row.split(','));
+            const match = rows.find(row => row[0] && row[0].trim().toUpperCase() === idInput);
+
+            if (match) {
+                const tier = (match[4] || "Industry-Registered").trim();
+                const badgeClass = tier === "Broker-Verified" ? "gold" : "silver";
+                const basis = tier === "Broker-Verified" ? "Internal Chain of Custody" : "Multi-Party Attestation";
+
+                resDiv.innerHTML = `
+                    <div class="status-badge ${badgeClass}">${tier}</div>
+                    <div class="data-row"><span class="data-label">Registry ID</span><span class="data-value">${match[0]}</span></div>
+                    <div class="data-row"><span class="data-label">Award Number</span><span class="data-value">${match[1]}</span></div>
+                    <div class="data-row"><span class="data-label">Status</span><span class="data-value">${match[2]}</span></div>
+                    <div class="data-row"><span class="data-label">Recorded Date</span><span class="data-value">${match[3]}</span></div>
+                    <div class="data-row"><span class="data-label">Validation Basis</span><span class="data-value">${basis}</span></div>
+                `;
+            } else {
+                resDiv.innerHTML = "<div style='color:#c53030; font-weight:bold;'>RECORD NOT FOUND</div>";
+            }
+        } catch (e) { resDiv.innerHTML = "Connection Error."; }
+    }
+</script>
+</body>
+</html>
