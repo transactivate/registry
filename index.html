@@ -9,29 +9,38 @@
         .container { background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 500px; text-align: center; margin: 20px; }
         h1 { color: #2c3e50; font-size: 1.4rem; margin-bottom: 0.5rem; }
         p.subtitle { color: #7f8c8d; font-size: 0.9rem; margin-bottom: 2rem; }
-        input { width: 100%; padding: 14px; margin-bottom: 1rem; border: 1px solid #dce4ec; border-radius: 6px; box-sizing: border-box; font-size: 1rem; outline: none; }
-        button { width: 100%; padding: 14px; background-color: #2c3e50; color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-        button:hover { background-color: #1a252f; }
+        input { width: 100%; padding: 14px; margin-bottom: 1rem; border: 1px solid #dce4ec; border-radius: 6px; box-sizing: border-box; font-size: 0.9rem; outline: none; font-family: monospace; }
+        .btn-main { width: 100%; padding: 14px; background-color: #2c3e50; color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-bottom: 10px; }
+        .btn-main:hover { background-color: #1a252f; }
+        .btn-print { background-color: #ecf0f1; color: #2c3e50; border: 1px solid #bdc3c7; width: auto; padding: 8px 16px; font-size: 0.8rem; margin-top: 15px; border-radius: 4px; cursor: pointer; display: none; }
         #result { margin-top: 2rem; font-weight: bold; font-size: 1.1rem; }
         #details { margin-top: 1.5rem; text-align: left; font-size: 0.85rem; color: #34495e; border-top: 1px solid #f1f1f1; padding-top: 1.5rem; }
         .data-section { margin-bottom: 1.2rem; border-bottom: 1px solid #f9f9f9; padding-bottom: 8px; }
         .section-label { font-size: 0.7rem; color: #bdc3c7; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; display: block; }
         .data-row { display: flex; justify-content: space-between; margin-bottom: 0.4rem; }
         .data-label { font-weight: 600; color: #7f8c8d; }
-        .hash-box { background: #f8f9fa; padding: 8px; border-radius: 4px; font-family: monospace; font-size: 0.7rem; word-break: break-all; border: 1px solid #eee; margin-top: 5px; }
+        .hash-display { background: #fdf2f2; padding: 10px; border-radius: 4px; font-family: monospace; font-size: 0.75rem; word-break: break-all; border: 1px solid #f5c6cb; color: #721c24; margin-top: 10px; text-align: center; }
+
+        @media print {
+            body { background: white; }
+            .container { box-shadow: none; border: none; width: 100%; max-width: 100%; padding: 0; }
+            input, .btn-main, .btn-print, p.subtitle { display: none !important; }
+            #details { border-top: 2px solid #2c3e50; }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>SBIR Lineage Registry</h1>
-    <p class="subtitle">Official Successor-in-Interest Ledger</p>
+    <p class="subtitle">Secure Document Verification Portal</p>
     
-    <input type="text" id="searchID" placeholder="Enter Record ID (e.g. S-1001)">
-    <button onclick="searchRegistry()">Verify Recordation</button>
+    <input type="text" id="searchHash" placeholder="Paste Document Fingerprint (SHA-256)">
+    <button class="btn-main" onclick="verifyFingerprint()">Verify Authenticity</button>
     
     <div id="result"></div>
     <div id="details"></div>
+    <button id="printBtn" class="btn-print" onclick="window.print()">Download Verification PDF</button>
 </div>
 
 <script>
@@ -47,52 +56,50 @@
             registryData = rows.map(row => row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(cell => cell.replace(/^"|"$/g, '').trim()));
 
             const params = new URLSearchParams(window.location.search);
-            const queryId = params.get('id');
-            if (queryId) {
-                document.getElementById('searchID').value = queryId;
-                setTimeout(searchRegistry, 500);
+            const queryHash = params.get('hash');
+            if (queryHash) {
+                document.getElementById('searchHash').value = queryHash;
+                setTimeout(verifyFingerprint, 500);
             }
         } catch (err) { console.error("Fetch error:", err); }
     }
 
-    function searchRegistry() {
-        const inputID = document.getElementById('searchID').value.trim().toUpperCase();
+    function verifyFingerprint() {
+        const inputHash = document.getElementById('searchHash').value.trim();
         const resultDiv = document.getElementById('result');
         const detailsDiv = document.getElementById('details');
+        const printBtn = document.getElementById('printBtn');
         
-        if (!inputID) return;
+        if (!inputHash) return;
 
-        const record = registryData.find(row => row[0] && row[0].toUpperCase() === inputID);
+        // Searches specifically in Column I (record[8])
+        const record = registryData.find(row => row[8] && row[8] === inputHash);
 
         if (record) {
-            resultDiv.innerHTML = `<span style="color: #27ae60;">✔ RECORD VERIFIED</span>`;
+            resultDiv.innerHTML = `<span style="color: #27ae60;">✔ DOCUMENT AUTHENTICATED</span>`;
+            printBtn.style.display = 'inline-block';
             detailsDiv.innerHTML = `
                 <div class="data-section">
-                    <span class="section-label">General Metadata</span>
-                    <div class="data-row"><span class="data-label">Record ID:</span> <span>${record[0]}</span></div>
-                    <div class="data-row"><span class="data-label">Award Number:</span> <span>${record[1]}</span></div>
+                    <span class="section-label">Registry Metadata</span>
+                    <div class="data-row"><span class="data-label">Internal Record ID:</span> <span>${record[0]}</span></div>
+                    <div class="data-row"><span class="data-label">SBIR Award:</span> <span>${record[1]}</span></div>
                     <div class="data-row"><span class="data-label">Tier/Status:</span> <span>${record[6]}</span></div>
                 </div>
                 <div class="data-section">
-                    <span class="section-label">Assignor (Seller)</span>
-                    <div class="data-row"><span class="data-label">Legal Name:</span> <span>${record[2]}</span></div>
-                    <div class="data-row"><span class="data-label">UEI:</span> <span>${record[3]}</span></div>
+                    <span class="section-label">Chain of Custody</span>
+                    <div class="data-row"><span class="data-label">Assignor:</span> <span>${record[2]} (UEI: ${record[3]})</span></div>
+                    <div class="data-row"><span class="data-label">Assignee:</span> <span>${record[4]} (UEI: ${record[5]})</span></div>
                 </div>
                 <div class="data-section">
-                    <span class="section-label">Assignee (Buyer)</span>
-                    <div class="data-row"><span class="data-label">Legal Name:</span> <span>${record[4]}</span></div>
-                    <div class="data-row"><span class="data-label">UEI:</span> <span>${record[5]}</span></div>
+                    <span class="section-label">Validation Date</span>
+                    <div class="data-row"><span class="data-label">Recordation Timestamp:</span> <span>${record[7]}</span></div>
                 </div>
-                <div class="data-section">
-                    <span class="section-label">Security Info</span>
-                    <div class="data-row"><span class="data-label">Recordation Date:</span> <span>${record[7]}</span></div>
-                    <div style="margin-top:5px;"><span class="data-label">SHA-256 Fingerprint:</span></div>
-                    <div class="hash-box">${record[8] || 'N/A'}</div>
-                </div>
+                <div class="hash-display">Validated Hash: ${record[8]}</div>
             `;
         } else {
-            resultDiv.innerHTML = `<span style="color: #e74c3c;">✘ RECORD NOT FOUND</span>`;
-            detailsDiv.innerHTML = `<p style="text-align:center;">Verify the Record ID or contact Transactivate support.</p>`;
+            resultDiv.innerHTML = `<span style="color: #e74c3c;">✘ INVALID FINGERPRINT</span>`;
+            printBtn.style.display = 'none';
+            detailsDiv.innerHTML = `<p style="text-align:center;">This fingerprint does not match any record in the Transactivate Registry. Document cannot be authenticated.</p>`;
         }
     }
 
