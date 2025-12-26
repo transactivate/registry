@@ -3,99 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>transactivate | SBIR Lineage Registry</title>
+    <title>Transactivate | SBIR Lineage Registry</title>
     <style>
-        body { font-family: -apple-system, system-ui, sans-serif; background-color: #f4f7f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 500px; text-align: center; border-top: 6px solid #003366; }
-        h1 { color: #003366; margin: 0 0 5px 0; font-size: 24px; letter-spacing: -0.5px; text-transform: lowercase; }
-        .subtitle { color: #666; font-size: 13px; margin-bottom: 30px; line-height: 1.4; }
-        input { width: 100%; padding: 14px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; }
-        button { background-color: #003366; color: white; border: none; padding: 14px; border-radius: 6px; cursor: pointer; font-size: 16px; width: 100%; font-weight: bold; }
-        #result { margin-top: 25px; padding: 25px; border-radius: 6px; display: none; text-align: left; font-size: 14px; border: 1px solid #e2e8f0; background-color: #ffffff; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
-        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; text-transform: uppercase; margin-bottom: 15px; }
-        .gold { background: #fefcbf; color: #b7791f; border: 1px solid #f6e05e; }
-        .silver { background: #edf2f7; color: #4a5568; border: 1px solid #cbd5e0; }
-        .data-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f7fafc; }
-        .data-label { color: #718096; font-weight: 500; }
-        .data-value { color: #2d3748; font-weight: 600; }
-        .footer { margin-top: 40px; font-size: 11px; color: #a0aec0; border-top: 1px solid #edf2f7; padding-top: 20px; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            background-color: #f4f7f6; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+        }
+        .container { 
+            background: white; 
+            padding: 2.5rem; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+            width: 100%; 
+            max-width: 420px; 
+            text-align: center; 
+        }
+        h1 { 
+            color: #2c3e50; 
+            font-size: 1.4rem; 
+            margin-bottom: 0.5rem; 
+            letter-spacing: -0.5px;
+        }
+        p.subtitle {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+        input { 
+            width: 100%; 
+            padding: 14px; 
+            margin-bottom: 1rem; 
+            border: 1px solid #dce4ec; 
+            border-radius: 6px; 
+            box-sizing: border-box; 
+            font-size: 1rem; 
+            outline: none;
+        }
+        input:focus { border-color: #2980b9; }
+        button { 
+            width: 100%; 
+            padding: 14px; 
+            background-color: #2c3e50; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            font-size: 1rem; 
+            font-weight: 600;
+            cursor: pointer; 
+            transition: background 0.2s; 
+        }
+        button:hover { background-color: #1a252f; }
+        #result { margin-top: 2rem; font-weight: bold; font-size: 1.1rem; }
+        #details { 
+            margin-top: 1.5rem; 
+            text-align: left; 
+            font-size: 0.9rem; 
+            color: #34495e; 
+            border-top: 1px solid #f1f1f1; 
+            padding-top: 1.5rem; 
+            min-height: 100px;
+        }
+        .data-row { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 0.8rem; 
+        }
+        .data-label { font-weight: 600; color: #7f8c8d; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>transactivate</h1>
-    <div class="subtitle">Official Successor-in-Interest Chain of Custody<br>SBIR Lineage Registry</div>
+    <h1>SBIR Lineage Registry</h1>
+    <p class="subtitle">Transactivate Official Verification Portal</p>
     
-    <input type="text" id="idInput" placeholder="Enter Record ID (e.g., S-1001)">
-    <button onclick="verify()">Verify Record</button>
-
+    <input type="text" id="searchID" placeholder="Enter Record ID (e.g. S-1001)">
+    <button onclick="searchRegistry()">Verify Record</button>
+    
     <div id="result"></div>
-    
-    <div class="footer">
-        <b>Regulatory Authority:</b> SBIR Policy Directive § 6(a)(5) & 85 FR 50062.<br>
-        Inquiries: <a href="mailto:admin@transactivate.ai" style="color:#003366;">admin@transactivate.ai</a>
-    </div>
+    <div id="details"></div>
 </div>
 
 <script>
     let registryData = [];
 
-    // 1. Fetch data from Google Sheets
+    // 1. Fetch data from Google Sheets with the specific ID provided
     async function fetchRegistryData() {
-        const sheetId = 'YOUR_SHEET_ID_HERE'; 
+        const sheetId = '12TnkHGzSFqJXJNAj64ErB09qMMDiaFstCdidlRG9HMY'; 
         const url = 'https://docs.google.com/spreadsheets/d/' + sheetId + '/gviz/tq?tqx=out:csv';
         
         try {
             const response = await fetch(url);
-            const data = await response.text();
-            registryData = parseCSV(data);
+            const csvText = await response.text();
             
-            // Handle auto-search if ID is in URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const autoId = urlParams.get('id');
-            if (autoId) {
-                document.getElementById('searchID').value = autoId;
-                searchRegistry();
+            // Convert CSV text to Array
+            const rows = csvText.split('\n');
+            registryData = rows.map(row => {
+                return row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)
+                          .map(cell => cell.replace(/^"|"$/g, '').trim());
+            });
+
+            // Auto-search if ID is in the URL (e.g., transactivate.ai?id=S-1001)
+            const params = new URLSearchParams(window.location.search);
+            const queryId = params.get('id');
+            if (queryId) {
+                document.getElementById('searchID').value = queryId;
+                setTimeout(searchRegistry, 500);
             }
-        } catch (error) {
-            console.error("Error fetching data:", error);
+        } catch (err) {
+            console.error("Data fetch error:", err);
+            document.getElementById('result').innerHTML = "Database Connection Error";
         }
     }
 
-    // 2. Simple CSV Parser
-    function parseCSV(csvText) {
-        const lines = csvText.split('\n');
-        return lines.map(line => {
-            return line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(item => item.replace(/^"|"$/g, ''));
-        });
-    }
-
-    // 3. Search Function
+    // 2. Search Logic
     function searchRegistry() {
-        const id = document.getElementById('searchID').value.trim().toUpperCase();
+        const inputID = document.getElementById('searchID').value.trim().toUpperCase();
         const resultDiv = document.getElementById('result');
         const detailsDiv = document.getElementById('details');
         
-        // Find match in Column A (index 0)
-        const match = registryData.find(row => row[0].trim().toUpperCase() === id);
+        if (!inputID) return;
 
-        if (match) {
+        // Matches input against the first column of the sheet
+        const record = registryData.find(row => row[0] && row[0].toUpperCase() === inputID);
+
+        if (record) {
             resultDiv.innerHTML = `<span style="color: #27ae60;">✔ RECORD VERIFIED</span>`;
             detailsDiv.innerHTML = `
-                <div class="data-row"><strong>Record ID:</strong> <span>${match[0]}</span></div>
-                <div class="data-row"><strong>Award Number:</strong> <span>${match[1]}</span></div>
-                <div class="data-row"><strong>Lineage Status:</strong> <span>${match[2]}</span></div>
-                <div class="data-row"><strong>Recordation Date:</strong> <span>${match[3]}</span></div>
+                <div class="data-row"><span class="data-label">Record ID:</span> <span>${record[0]}</span></div>
+                <div class="data-row"><span class="data-label">Award Number:</span> <span>${record[1] || 'N/A'}</span></div>
+                <div class="data-row"><span class="data-label">Lineage Status:</span> <span>${record[2] || 'N/A'}</span></div>
+                <div class="data-row"><span class="data-label">Verification Date:</span> <span>${record[3] || 'N/A'}</span></div>
             `;
         } else {
             resultDiv.innerHTML = `<span style="color: #e74c3c;">✘ RECORD NOT FOUND</span>`;
-            detailsDiv.innerHTML = "Please check the ID and try again.";
+            detailsDiv.innerHTML = `<p style="text-align:center; color:#95a5a6;">Please check the ID and try again.</p>`;
         }
     }
 
-    // Initialize
     fetchRegistryData();
 </script>
+
 </body>
 </html>
