@@ -6,41 +6,48 @@
     <title>Transactivate | SBIR Lineage Registry</title>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 500px; text-align: center; margin: 20px; }
-        h1 { color: #2c3e50; font-size: 1.4rem; margin-bottom: 0.5rem; }
+        .container { background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 550px; text-align: center; margin: 20px; position: relative; border-top: 8px solid #2c3e50; }
+        h1 { color: #2c3e50; font-size: 1.6rem; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
         p.subtitle { color: #7f8c8d; font-size: 0.9rem; margin-bottom: 2rem; }
-        input { width: 100%; padding: 14px; margin-bottom: 1rem; border: 1px solid #dce4ec; border-radius: 6px; box-sizing: border-box; font-size: 0.9rem; outline: none; font-family: monospace; }
+        input { width: 100%; padding: 14px; margin-bottom: 1rem; border: 1px solid #dce4ec; border-radius: 6px; box-sizing: border-box; font-size: 0.9rem; outline: none; font-family: monospace; text-align: center; }
         .btn-main { width: 100%; padding: 14px; background-color: #2c3e50; color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-bottom: 10px; }
         .btn-main:hover { background-color: #1a252f; }
-        .btn-print { background-color: #ecf0f1; color: #2c3e50; border: 1px solid #bdc3c7; width: auto; padding: 8px 16px; font-size: 0.8rem; margin-top: 15px; border-radius: 4px; cursor: pointer; display: none; }
-        #result { margin-top: 2rem; font-weight: bold; font-size: 1.1rem; }
-        #details { margin-top: 1.5rem; text-align: left; font-size: 0.85rem; color: #34495e; border-top: 1px solid #f1f1f1; padding-top: 1.5rem; }
-        .data-section { margin-bottom: 1.2rem; border-bottom: 1px solid #f9f9f9; padding-bottom: 8px; }
-        .section-label { font-size: 0.7rem; color: #bdc3c7; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; display: block; }
-        .data-row { display: flex; justify-content: space-between; margin-bottom: 0.4rem; }
-        .data-label { font-weight: 600; color: #7f8c8d; }
-        .hash-display { background: #fdf2f2; padding: 10px; border-radius: 4px; font-family: monospace; font-size: 0.75rem; word-break: break-all; border: 1px solid #f5c6cb; color: #721c24; margin-top: 10px; text-align: center; }
+        .btn-print { background-color: white; color: #2c3e50; border: 2px solid #2c3e50; width: auto; padding: 10px 20px; font-size: 0.85rem; font-weight: bold; margin-top: 20px; border-radius: 6px; cursor: pointer; display: none; }
+        .btn-print:hover { background-color: #f4f7f6; }
+        
+        #result { margin-top: 2rem; font-weight: bold; font-size: 1.2rem; }
+        #details { margin-top: 1.5rem; text-align: left; font-size: 0.9rem; color: #34495e; border-top: 1px solid #eee; padding-top: 1.5rem; }
+        
+        .data-section { margin-bottom: 1.5rem; }
+        .section-label { font-size: 0.75rem; color: #bdc3c7; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; display: block; border-bottom: 1px solid #f1f1f1; padding-bottom: 4px; }
+        .data-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+        .data-label { font-weight: 700; color: #7f8c8d; min-width: 140px; }
+        .data-value { text-align: right; word-break: break-word; }
+        .hash-display { background: #fff; padding: 12px; border: 1px dashed #bdc3c7; border-radius: 4px; font-family: monospace; font-size: 0.75rem; word-break: break-all; color: #2c3e50; margin-top: 10px; line-height: 1.4; }
 
+        /* PRINT STYLES - This is what the KO sees on paper */
         @media print {
-            body { background: white; }
-            .container { box-shadow: none; border: none; width: 100%; max-width: 100%; padding: 0; }
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; border: 2px solid #2c3e50; width: 100%; max-width: 100%; padding: 40px; border-radius: 0; }
             input, .btn-main, .btn-print, p.subtitle { display: none !important; }
-            #details { border-top: 2px solid #2c3e50; }
+            h1 { font-size: 2rem; margin-top: 0; }
+            h1::after { content: " | VERIFICATION CERTIFICATE"; font-size: 1.2rem; display: block; color: #7f8c8d; margin-top: 5px; }
+            .hash-display { border: 1px solid #000; background: #f9f9f9; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>SBIR Lineage Registry</h1>
-    <p class="subtitle">Secure Document Verification Portal</p>
+    <h1>Transactivate</h1>
+    <p class="subtitle">SBIR Succession & Lineage Registry</p>
     
-    <input type="text" id="searchHash" placeholder="Paste Document Fingerprint (SHA-256)">
-    <button class="btn-main" onclick="verifyFingerprint()">Verify Authenticity</button>
+    <input type="text" id="searchHash" placeholder="Paste Document Fingerprint (SHA-256 Hash)">
+    <button class="btn-main" onclick="verifyFingerprint()">Verify Record Authenticity</button>
     
     <div id="result"></div>
     <div id="details"></div>
-    <button id="printBtn" class="btn-print" onclick="window.print()">Download Verification PDF</button>
+    <button id="printBtn" class="btn-print" onclick="window.print()">Download Proof of Recordation (PDF)</button>
 </div>
 
 <script>
@@ -72,7 +79,6 @@
         
         if (!inputHash) return;
 
-        // Searches specifically in Column I (record[8])
         const record = registryData.find(row => row[8] && row[8] === inputHash);
 
         if (record) {
@@ -80,26 +86,27 @@
             printBtn.style.display = 'inline-block';
             detailsDiv.innerHTML = `
                 <div class="data-section">
-                    <span class="section-label">Registry Metadata</span>
-                    <div class="data-row"><span class="data-label">Internal Record ID:</span> <span>${record[0]}</span></div>
-                    <div class="data-row"><span class="data-label">SBIR Award:</span> <span>${record[1]}</span></div>
-                    <div class="data-row"><span class="data-label">Tier/Status:</span> <span>${record[6]}</span></div>
+                    <span class="section-label">Registry Record Metadata</span>
+                    <div class="data-row"><span class="data-label">Internal ID:</span> <span class="data-value">${record[0]}</span></div>
+                    <div class="data-row"><span class="data-label">SBIR Award:</span> <span class="data-value">${record[1]}</span></div>
+                    <div class="data-row"><span class="data-label">Verification Tier:</span> <span class="data-value">${record[6]}</span></div>
                 </div>
                 <div class="data-section">
-                    <span class="section-label">Chain of Custody</span>
-                    <div class="data-row"><span class="data-label">Assignor:</span> <span>${record[2]} (UEI: ${record[3]})</span></div>
-                    <div class="data-row"><span class="data-label">Assignee:</span> <span>${record[4]} (UEI: ${record[5]})</span></div>
+                    <span class="section-label">Verified Parties</span>
+                    <div class="data-row"><span class="data-label">Assignor:</span> <span class="data-value">${record[2]}<br><small>(UEI: ${record[3]})</small></span></div>
+                    <div class="data-row" style="margin-top:10px;"><span class="data-label">Assignee:</span> <span class="data-value">${record[4]}<br><small>(UEI: ${record[5]})</small></span></div>
                 </div>
                 <div class="data-section">
-                    <span class="section-label">Validation Date</span>
-                    <div class="data-row"><span class="data-label">Recordation Timestamp:</span> <span>${record[7]}</span></div>
+                    <span class="section-label">Chain of Custody Timestamp</span>
+                    <div class="data-row"><span class="data-label">Recorded On:</span> <span class="data-value">${record[7]}</span></div>
                 </div>
-                <div class="hash-display">Validated Hash: ${record[8]}</div>
+                <span class="section-label">Cryptographic Fingerprint</span>
+                <div class="hash-display">${record[8]}</div>
             `;
         } else {
             resultDiv.innerHTML = `<span style="color: #e74c3c;">✘ INVALID FINGERPRINT</span>`;
             printBtn.style.display = 'none';
-            detailsDiv.innerHTML = `<p style="text-align:center;">This fingerprint does not match any record in the Transactivate Registry. Document cannot be authenticated.</p>`;
+            detailsDiv.innerHTML = `<p style="text-align:center; color:#7f8c8d;">The submitted fingerprint does not match any entry in the transactivate SBIR registry. Verification failed.</p>`;
         }
     }
 
