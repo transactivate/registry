@@ -52,8 +52,8 @@
     async function verify() {
         const idInput = document.getElementById('idInput').value.trim().toUpperCase();
         const resDiv = document.getElementById('result');
-        const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS2T0r5LWAPWYjhpWCXhm5O_-G1Cko41wwAbcB5IUcX8EY1AZgXKZH70t9oahorWs7RlAEf3YIITph6/pub?gid=0&single=true&output=csv&cb=" + new Date().getTime();
-
+        const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&tq=SELECT%20*&cachebust=${new Date().getTime()}`;
+        
         if (!idInput) return;
         resDiv.style.display = "block";
         resDiv.innerHTML = "Querying Ledger...";
