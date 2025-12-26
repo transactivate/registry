@@ -39,49 +39,63 @@
 </div>
 
 <script>
-    // URL Intelligence: Auto-run if ID is in the link
-    window.onload = function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const id = urlParams.get('id');
-        if (id) {
-            document.getElementById('idInput').value = id;
-            verify();
-        }
-    };
+    let registryData = [];
 
-    async function verify() {
-        const idInput = document.getElementById('idInput').value.trim().toUpperCase();
-        const resDiv = document.getElementById('result');
-        const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&tq=SELECT%20*&cachebust=${new Date().getTime()}`;
+    // 1. Fetch data from Google Sheets
+    async function fetchRegistryData() {
+        const sheetId = 'YOUR_SHEET_ID_HERE'; 
+        const url = 'https://docs.google.com/spreadsheets/d/' + sheetId + '/gviz/tq?tqx=out:csv';
         
-        if (!idInput) return;
-        resDiv.style.display = "block";
-        resDiv.innerHTML = "Querying Ledger...";
-
         try {
-            const response = await fetch(sheetUrl);
+            const response = await fetch(url);
             const data = await response.text();
-            const rows = data.split(/\r?\n/).map(row => row.split(','));
-            const match = rows.find(row => row[0] && row[0].trim().toUpperCase() === idInput);
-
-            if (match) {
-                const tier = (match[4] || "Industry-Registered").trim();
-                const badgeClass = tier === "Broker-Verified" ? "gold" : "silver";
-                const basis = tier === "Broker-Verified" ? "Internal Chain of Custody" : "Multi-Party Attestation";
-
-                resDiv.innerHTML = `
-                    <div class="status-badge ${badgeClass}">${tier}</div>
-                    <div class="data-row"><span class="data-label">Registry ID</span><span class="data-value">${match[0]}</span></div>
-                    <div class="data-row"><span class="data-label">Award Number</span><span class="data-value">${match[1]}</span></div>
-                    <div class="data-row"><span class="data-label">Status</span><span class="data-value">${match[2]}</span></div>
-                    <div class="data-row"><span class="data-label">Recorded Date</span><span class="data-value">${match[3]}</span></div>
-                    <div class="data-row"><span class="data-label">Validation Basis</span><span class="data-value">${basis}</span></div>
-                `;
-            } else {
-                resDiv.innerHTML = "<div style='color:#c53030; font-weight:bold;'>RECORD NOT FOUND</div>";
+            registryData = parseCSV(data);
+            
+            // Handle auto-search if ID is in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const autoId = urlParams.get('id');
+            if (autoId) {
+                document.getElementById('searchID').value = autoId;
+                searchRegistry();
             }
-        } catch (e) { resDiv.innerHTML = "Connection Error."; }
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
     }
+
+    // 2. Simple CSV Parser
+    function parseCSV(csvText) {
+        const lines = csvText.split('\n');
+        return lines.map(line => {
+            return line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(item => item.replace(/^"|"$/g, ''));
+        });
+    }
+
+    // 3. Search Function
+    function searchRegistry() {
+        const id = document.getElementById('searchID').value.trim().toUpperCase();
+        const resultDiv = document.getElementById('result');
+        const detailsDiv = document.getElementById('details');
+        
+        // Find match in Column A (index 0)
+        const match = registryData.find(row => row[0].trim().toUpperCase() === id);
+
+        if (match) {
+            resultDiv.innerHTML = `<span style="color: #27ae60;">✔ RECORD VERIFIED</span>`;
+            detailsDiv.innerHTML = `
+                <div class="data-row"><strong>Record ID:</strong> <span>${match[0]}</span></div>
+                <div class="data-row"><strong>Award Number:</strong> <span>${match[1]}</span></div>
+                <div class="data-row"><strong>Lineage Status:</strong> <span>${match[2]}</span></div>
+                <div class="data-row"><strong>Recordation Date:</strong> <span>${match[3]}</span></div>
+            `;
+        } else {
+            resultDiv.innerHTML = `<span style="color: #e74c3c;">✘ RECORD NOT FOUND</span>`;
+            detailsDiv.innerHTML = "Please check the ID and try again.";
+        }
+    }
+
+    // Initialize
+    fetchRegistryData();
 </script>
 </body>
 </html>
