@@ -16,10 +16,10 @@
         .btn-print:hover { background-color: #f4f7f6; }
         
         /* Tier Badge Styles */
-        .tier-badge { display: inline-block; padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
-        .tier-1 { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #2e7d32; } /* Green */
-        .tier-2 { background-color: #e3f2fd; color: #1565c0; border: 1px solid #1565c0; } /* Blue */
-        .tier-3 { background-color: #fff3e0; color: #ef6c00; border: 1px solid #ef6c00; } /* Orange */
+        .tier-badge { display: inline-block; padding: 6px 16px; border-radius: 50px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 15px; }
+        .tier-1 { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #2e7d32; } /* Green - Broker */
+        .tier-2 { background-color: #e3f2fd; color: #1565c0; border: 1px solid #1565c0; } /* Blue - Attested */
+        .tier-3 { background-color: #fff3e0; color: #ef6c00; border: 1px solid #ef6c00; } /* Orange - Pending */
 
         #result { margin-top: 2rem; font-weight: bold; font-size: 1.2rem; }
         #details { margin-top: 1.5rem; text-align: left; font-size: 0.9rem; color: #34495e; border-top: 1px solid #eee; padding-top: 1.5rem; }
@@ -34,7 +34,8 @@
             body { background: white; padding: 0; }
             .container { box-shadow: none; border: 2px solid #2c3e50; width: 100%; max-width: 100%; padding: 40px; border-radius: 0; }
             input, .btn-main, .btn-print, p.subtitle { display: none !important; }
-            .tier-badge { border: 2px solid black !important; color: black !important; }
+            h1::after { content: " | VERIFICATION CERTIFICATE"; font-size: 1.2rem; display: block; color: #7f8c8d; margin-top: 5px; }
+            .tier-badge { border: 2px solid black !important; color: black !important; background: white !important; }
         }
     </style>
 </head>
@@ -51,10 +52,11 @@
 </div>
 
 <script>
-    const apiURL = "YOUR_APPS_SCRIPT_URL_HERE"; 
+    // YOUR UPDATED API URL
+    const apiURL = "https://script.google.com/macros/s/AKfycbx0-xlYwjv42d9SCOzbYE-icFQOMYNtx12Y19l3kZxQg03HhkCBAaMSnRSGo2fIj-Q/exec"; 
 
     function getTierInfo(tier) {
-        const t = tier.toString().toLowerCase();
+        const t = tier ? tier.toString().toLowerCase() : "";
         if (t.includes("1")) return { class: "tier-1", label: "Transactivate Broker-Verified" };
         if (t.includes("2")) return { class: "tier-2", label: "Counterparty Attested" };
         return { class: "tier-3", label: "Self-Reported / Pending" };
