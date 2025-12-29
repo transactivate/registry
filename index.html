@@ -80,6 +80,7 @@
                         <div class="data-row"><span class="data-label">Internal ID:</span> <span class="data-value">${data.id}</span></div>
                         <div class="data-row"><span class="data-label">SBIR Award:</span> <span class="data-value">${data.award}</span></div>
                         <div class="data-row"><span class="data-label">Verification Tier:</span> <span class="data-value">${data.tier}</span></div>
+                        <div class="data-row"><span class="data-label">SBIR Status:</span> <span class="data-value">${data.verified_status}</span></div>
                     </div>
                     <div class="data-section">
                         <span class="section-label">Verified Parties</span>
@@ -99,7 +100,7 @@
             }
         } catch (err) { 
             resultDiv.innerHTML = `<span style="color: #e74c3c;">Error</span>`;
-            detailsDiv.innerHTML = `<p style="text-align:center;">Could not reach the registry. Ensure your Google Script is deployed correctly.</p>`;
+            detailsDiv.innerHTML = `<p style="text-align:center;">Could not reach the registry. Verification failed.</p>`;
         }
     }
 </script>
