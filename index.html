@@ -53,12 +53,7 @@
 
     <div class="manifesto">
         <p>
-            <strong>Official SBIR Lineage Record:</strong> This registry provides an immutable audit trail for the succession of SBIR/STTR data rights. 
-            <br><br>
-            <strong>Verification Tiers:</strong><br>
-            • <span style="color: #2e7d32; font-weight: bold;">Tier 1:</span> Broker-verified via Transactivate audit.<br>
-            • <span style="color: #1565c0; font-weight: bold;">Tier 2:</span> Multi-party attestation.<br>
-            • <span style="color: #ef6c00; font-weight: bold;">Tier 3:</span> Public record; registration in progress.
+            <strong>Official SBIR Lineage Record:</strong> Providing immutable cryptographic verification for the succession of SBIR/STTR data rights when federal databases are offline or incomplete. 
         </p>
     </div>
     
@@ -75,7 +70,7 @@
 </p>
 
 <script>
-    // Updated with your authorized production URL
+    // Authorized Production Script URL
     const apiURL = "https://script.google.com/macros/s/AKfycbxqdJ9ignCg3pHamagZwkRExEyPExoHEivYuLjib66MRSeCXKOnXSgHVGPt9Eoxk0jp/exec"; 
 
     function getTierInfo(tier) {
@@ -93,11 +88,12 @@
         
         if (!searchValue) return;
 
-        resultDiv.innerHTML = "Querying Databases...";
+        resultDiv.innerHTML = "Querying Registry...";
         detailsDiv.innerHTML = "";
         printBtn.style.display = 'none';
 
         try {
+            // Fetch data from the Apps Script bridge
             const response = await fetch(`${apiURL}?query=${encodeURIComponent(searchValue)}`);
             const data = await response.json();
 
@@ -106,7 +102,11 @@
                 resultDiv.innerHTML = `<span style="color: #27ae60;">✔ RECORD LOCATED</span>`;
                 printBtn.style.display = 'inline-block';
                 
-                const govColor = (data.gov_verified && data.gov_verified.includes('MATCH')) ? '#27ae60' : '#e67e22';
+                // Identify Federal Sync Status
+                let govLabel = data.gov_verified || "Sync Pending";
+                let govColor = "#e67e22"; // Default Orange
+                if (govLabel.includes("MATCH")) govColor = "#27ae60"; // Green
+                if (govLabel.includes("Offline") || govLabel.includes("Maintenance")) govColor = "#7f8c8d"; // Gray
 
                 detailsDiv.innerHTML = `
                     <div style="text-align: center;">
@@ -115,7 +115,7 @@
                     <div class="data-section">
                         <span class="section-label">Registry Record Metadata</span>
                         <div class="data-row"><span class="data-label">Award Number:</span> <span class="data-value">${data.award}</span></div>
-                        <div class="data-row"><span class="data-label">SBIR.gov Status:</span> <span class="data-value" style="font-weight:bold; color:${govColor};">${data.gov_verified || 'Pending Sync'}</span></div>
+                        <div class="data-row"><span class="data-label">SBIR.gov Status:</span> <span class="data-value" style="font-weight:bold; color:${govColor};">${govLabel}</span></div>
                         <div class="data-row"><span class="data-label">Record Status:</span> <span class="data-value">Active</span></div>
                     </div>
                     <div class="data-section">
@@ -133,15 +133,15 @@
                     </div>
                 `;
             } else if (data.status === "error") {
-                resultDiv.innerHTML = `<span style="color: #e74c3c;">System Error</span>`;
-                detailsDiv.innerHTML = `<p style="text-align:center;">${data.message}</p>`;
+                resultDiv.innerHTML = `<span style="color: #e74c3c;">Registry Busy</span>`;
+                detailsDiv.innerHTML = `<p style="text-align:center;">The system is currently syncing. Please try again in a moment.</p>`;
             } else {
                 resultDiv.innerHTML = `<span style="color: #e74c3c;">✘ NO RECORD FOUND</span>`;
-                detailsDiv.innerHTML = `<p style="text-align:center; color:#7f8c8d;">No record found for "<strong>${searchValue}</strong>".<br><br>Verify the identifier or initiate a new filing below.</p>`;
+                detailsDiv.innerHTML = `<p style="text-align:center; color:#7f8c8d;">No record found for "<strong>${searchValue}</strong>".<br><br>Initiate a new filing below to secure this lineage.</p>`;
             }
         } catch (err) { 
             resultDiv.innerHTML = `<span style="color: #e74c3c;">Connection Error</span>`;
-            console.error(err);
+            console.error("Fetch error:", err);
         }
     }
 </script>
