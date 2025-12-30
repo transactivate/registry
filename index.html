@@ -54,7 +54,8 @@
 </div>
 
 <script>
-    const apiURL = "https://script.google.com/macros/s/AKfycbyPr3pEp-9gmoKwb5-PGI77VFvGwQT4ctpkD6KFmQcKTCWIOzz8NJ3KtHrL8I5oRFob/exec"; 
+    // YOUR UPDATED ENDPOINT
+    const apiURL = "https://script.google.com/macros/s/AKfycbxqdJ9ignCg3pHamagZwkRExEyPExoHEivYuLjib66MRSeCXKOnXSgHVGPt9Eoxk0jp/exec"; 
 
     function getTierInfo(tier) {
         const t = tier ? tier.toString() : "3";
@@ -76,7 +77,6 @@
         printBtn.style.display = 'none';
 
         try {
-            // Updated fetch to send the search value to your corrected GAS script
             const response = await fetch(`${apiURL}?query=${encodeURIComponent(searchValue)}`);
             const data = await response.json();
 
@@ -112,7 +112,7 @@
                 `;
             } else {
                 resultDiv.innerHTML = `<span style="color: #e74c3c;">✘ NO RECORD FOUND</span>`;
-                detailsDiv.innerHTML = `<p style="text-align:center; color:#7f8c8d;">No public record found for "<strong>${searchValue}</strong>".<br><br>Please check the Award Number or ensure the record has been set to "Show Publicly" by the administrator.</p>`;
+                detailsDiv.innerHTML = `<p style="text-align:center; color:#7f8c8d;">No public record found for "<strong>${searchValue}</strong>".<br><br>Please check the Award Number or Fingerprint.</p>`;
             }
         } catch (err) { 
             resultDiv.innerHTML = `<span style="color: #e74c3c;">Connection Error</span>`;
