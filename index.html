@@ -44,74 +44,82 @@
 <div class="container">
     <h1>Transactivate</h1>
     <p class="subtitle">SBIR Succession & Lineage Registry</p>
-    <input type="text" id="searchHash" placeholder="Paste Document Fingerprint (SHA-256 Hash)">
-    <button class="btn-main" onclick="verifyFingerprint()">Verify Record Authenticity</button>
+    
+    <input type="text" id="searchID" placeholder="Enter SBIR Award Number (e.g. 12345)">
+    <button class="btn-main" onclick="verifyRecord()">Search Registry</button>
+    
     <div id="result"></div>
     <div id="details"></div>
     <button id="printBtn" class="btn-print" onclick="window.print()">Download Proof of Recordation (PDF)</button>
 </div>
 
 <script>
-    // YOUR UPDATED API URL
-    const apiURL = "https://script.google.com/macros/s/AKfycbx0-xlYwjv42d9SCOzbYE-icFQOMYNtx12Y19l3kZxQg03HhkCBAaMSnRSGo2fIj-Q/exec"; 
+    const apiURL = "https://script.google.com/macros/s/AKfycbwzGGkseivh9nXk29cUmCZTUcjlg4TAqt82-c5-fsBLWJu63It61JPeX9OSYwdYrznT/exec"; 
 
     function getTierInfo(tier) {
-        const t = tier ? tier.toString().toLowerCase() : "";
-        if (t.includes("1")) return { class: "tier-1", label: "Transactivate Broker-Verified" };
-        if (t.includes("2")) return { class: "tier-2", label: "Counterparty Attested" };
-        return { class: "tier-3", label: "Self-Reported / Pending" };
+        const t = tier ? tier.toString() : "3";
+        if (t === "1") return { class: "tier-1", label: "Registry-Verified (Tier 1)" };
+        if (t === "2") return { class: "tier-2", label: "Counterparty Attested (Tier 2)" };
+        return { class: "tier-3", label: "Filing Pending (Tier 3)" };
     }
 
-    async function verifyFingerprint() {
-        const inputHash = document.getElementById('searchHash').value.trim();
+    async function verifyRecord() {
+        const searchValue = document.getElementById('searchID').value.trim();
         const resultDiv = document.getElementById('result');
         const detailsDiv = document.getElementById('details');
         const printBtn = document.getElementById('printBtn');
-        if (!inputHash) return;
+        
+        if (!searchValue) {
+            resultDiv.innerHTML = `<span style="color: #e67e22;">Please enter an Award Number.</span>`;
+            return;
+        }
 
         resultDiv.innerHTML = "Querying Registry...";
         detailsDiv.innerHTML = "";
         printBtn.style.display = 'none';
 
         try {
-            const response = await fetch(`${apiURL}?hash=${encodeURIComponent(inputHash)}`);
+            const response = await fetch(`${apiURL}?award=${encodeURIComponent(searchValue)}`);
             const data = await response.json();
 
             if (data.status === "success") {
                 const tierInfo = getTierInfo(data.tier);
-                resultDiv.innerHTML = `<span style="color: #27ae60;">✔ DOCUMENT AUTHENTICATED</span>`;
+                resultDiv.innerHTML = `<span style="color: #27ae60;">✔ RECORD LOCATED</span>`;
                 printBtn.style.display = 'inline-block';
+                
                 detailsDiv.innerHTML = `
                     <div style="text-align: center;">
                         <span class="tier-badge ${tierInfo.class}">${tierInfo.label}</span>
                     </div>
                     <div class="data-section">
                         <span class="section-label">Registry Record Metadata</span>
-                        <div class="data-row"><span class="data-label">Internal ID:</span> <span class="data-value">${data.id}</span></div>
                         <div class="data-row"><span class="data-label">SBIR Award:</span> <span class="data-value">${data.award}</span></div>
-                        <div class="data-row"><span class="data-label">Record Status:</span> <span class="data-value">${data.verified_status}</span></div>
+                        <div class="data-row"><span class="data-label">Validation Status:</span> <span class="data-value">${data.counterparty_status}</span></div>
                     </div>
                     <div class="data-section">
                         <span class="section-label">Verified Parties</span>
-                        <div class="data-row"><span class="data-label">Assignor:</span> <span class="data-value">${data.assignor}<br><small>(UEI: ${data.assignor_uei})</small></span></div>
-                        <div class="data-row" style="margin-top:10px;"><span class="data-label">Assignee:</span> <span class="data-value">${data.assignee}<br><small>(UEI: ${data.assignee_uei})</small></span></div>
+                        <div class="data-row"><span class="data-label">Assignor:</span> <span class="data-value">${data.assignor}</span></div>
+                        <div class="data-row" style="margin-top:5px;"><span class="data-label">Assignee:</span> <span class="data-value">${data.assignee}</span></div>
                     </div>
                     <div class="data-section">
                         <span class="section-label">Chain of Custody Timestamp</span>
-                        <div class="data-row"><span class="data-label">Recorded On:</span> <span class="data-value">${data.date}</span></div>
+                        <div class="data-row"><span class="data-label">Recorded On:</span> <span class="data-value">${data.date || 'Pending Finalization'}</span></div>
                     </div>
-                    <span class="section-label">Cryptographic Fingerprint</span>
-                    <div class="hash-display">${data.hash}</div>
+                    <div class="data-section">
+                        <span class="section-label">Cryptographic Proof (SHA-256)</span>
+                        <div class="hash-display">${data.hash}</div>
+                    </div>
                 `;
             } else {
-                resultDiv.innerHTML = `<span style="color: #e74c3c;">✘ INVALID FINGERPRINT</span>`;
-                detailsDiv.innerHTML = `<p style="text-align:center; color:#7f8c8d;">The submitted fingerprint does not match any entry in the Transactivate SBIR registry.</p>`;
+                resultDiv.innerHTML = `<span style="color: #e74c3c;">✘ RECORD NOT FOUND</span>`;
+                detailsDiv.innerHTML = `<p style="text-align:center; color:#7f8c8d;">No public record found for Award Number: <strong>${searchValue}</strong>.<br><br><small>If you recently filed, please allow 1-2 minutes for indexing.</small></p>`;
             }
         } catch (err) { 
-            resultDiv.innerHTML = `<span style="color: #e74c3c;">Error</span>`;
-            detailsDiv.innerHTML = `<p style="text-align:center;">Could not reach the registry. Verification failed.</p>`;
+            resultDiv.innerHTML = `<span style="color: #e74c3c;">Connection Error</span>`;
+            detailsDiv.innerHTML = `<p style="text-align:center;">Unable to reach the registry server. Please check your connection.</p>`;
         }
     }
 </script>
+
 </body>
 </html>
