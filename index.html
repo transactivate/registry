@@ -15,7 +15,6 @@
         .btn-print { background-color: white; color: #2c3e50; border: 2px solid #2c3e50; width: auto; padding: 10px 20px; font-size: 0.85rem; font-weight: bold; margin-top: 20px; border-radius: 6px; cursor: pointer; display: none; }
         .btn-print:hover { background-color: #f4f7f6; }
         
-        /* Tier Badge Styles */
         .tier-badge { display: inline-block; padding: 6px 16px; border-radius: 50px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 15px; }
         .tier-1 { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #2e7d32; }
         .tier-2 { background-color: #e3f2fd; color: #1565c0; border: 1px solid #1565c0; }
@@ -35,7 +34,6 @@
             .container { box-shadow: none; border: 2px solid #2c3e50; width: 100%; max-width: 100%; padding: 40px; border-radius: 0; }
             input, .btn-main, .btn-print, p.subtitle { display: none !important; }
             h1::after { content: " | VERIFICATION CERTIFICATE"; font-size: 1.2rem; display: block; color: #7f8c8d; margin-top: 5px; }
-            .tier-badge { border: 2px solid black !important; color: black !important; background: white !important; }
         }
     </style>
 </head>
@@ -54,7 +52,6 @@
 </div>
 
 <script>
-    // YOUR UPDATED ENDPOINT
     const apiURL = "https://script.google.com/macros/s/AKfycbxqdJ9ignCg3pHamagZwkRExEyPExoHEivYuLjib66MRSeCXKOnXSgHVGPt9Eoxk0jp/exec"; 
 
     function getTierInfo(tier) {
@@ -112,7 +109,7 @@
                 `;
             } else {
                 resultDiv.innerHTML = `<span style="color: #e74c3c;">✘ NO RECORD FOUND</span>`;
-                detailsDiv.innerHTML = `<p style="text-align:center; color:#7f8c8d;">No public record found for "<strong>${searchValue}</strong>".<br><br>Please check the Award Number or Fingerprint.</p>`;
+                detailsDiv.innerHTML = `<p style="text-align:center; color:#7f8c8d;">No record found for "<strong>${searchValue}</strong>".<br><br>Ensure the record is set to "Show Publicly" in the registry.</p>`;
             }
         } catch (err) { 
             resultDiv.innerHTML = `<span style="color: #e74c3c;">Connection Error</span>`;
