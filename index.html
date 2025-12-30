@@ -11,23 +11,19 @@
         h1 { color: var(--primary); font-size: 1.8rem; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
         .subtitle { color: var(--gray); font-size: 0.95rem; margin-bottom: 2rem; }
         
-        /* The Legend / Manifesto */
         .manifesto { text-align: left; background: #f8fafb; border-radius: 8px; padding: 18px; margin-bottom: 25px; border-left: 4px solid var(--primary); }
         .manifesto h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 0; color: var(--primary); }
         .manifesto p { margin: 0; font-size: 0.85rem; color: #34495e; line-height: 1.6; }
 
-        /* UI Elements */
         input { width: 100%; padding: 14px; margin-bottom: 1rem; border: 1px solid #dce4ec; border-radius: 6px; box-sizing: border-box; font-size: 1rem; text-align: center; font-family: monospace; outline-color: var(--primary); }
         .btn-main { width: 100%; padding: 15px; background-color: var(--primary); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.1s; }
         .btn-main:active { transform: scale(0.98); }
         
-        /* Badges */
         .tier-badge { display: inline-block; padding: 8px 20px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; margin-bottom: 20px; }
         .tier-1 { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #2e7d32; }
         .tier-2 { background-color: #e3f2fd; color: #1565c0; border: 1px solid #1565c0; }
         .tier-3 { background-color: #fff3e0; color: #ef6c00; border: 1px solid #ef6c00; }
 
-        /* Result Display */
         #result { margin-top: 2rem; font-weight: bold; font-size: 1.2rem; }
         #details { margin-top: 1.5rem; text-align: left; font-size: 0.9rem; color: #34495e; border-top: 1px solid #eee; padding-top: 1.5rem; display: none; }
         .data-section { margin-bottom: 1.5rem; }
@@ -50,13 +46,13 @@
     <div class="manifesto">
         <h3>Verification Legend</h3>
         <p>
-            <strong>Tier 1:</strong> Broker-audited legal chain of title.<br>
+            <strong>Tier 1:</strong> Fully audited legal chain of title.<br>
             <strong>Tier 2:</strong> Multi-party attested succession.<br>
-            <strong>Tier 3:</strong> Self-reported; awaiting administrative sync.
+            <strong>Tier 3:</strong> Self-reported; registration in progress.
         </p>
     </div>
     
-    <input type="text" id="searchField" placeholder="Enter Award Number or Record Hash">
+    <input type="text" id="searchField" placeholder="Enter SBIR Award Number">
     <button class="btn-main" onclick="verifyRecord()">Verify Ledger Record</button>
     
     <div id="result"></div>
@@ -64,7 +60,7 @@
 </div>
 
 <p class="footer-link">
-    Missing Record? <a href="https://tally.so/r/kd9VKd" target="_blank">File a New Succession Record</a>
+    Don't see your record? <a href="https://tally.so/r/kd9VKd" target="_blank">Initiate a New Filing</a>
 </p>
 
 <script>
@@ -77,28 +73,27 @@
         
         if (!searchValue) return;
 
-        resultDiv.innerHTML = "Querying Decentralized Ledger...";
+        resultDiv.innerHTML = "Querying Registry Ledger...";
         detailsDiv.style.display = "none";
-        detailsDiv.innerHTML = "";
 
         try {
             const response = await fetch(`${apiURL}?query=${encodeURIComponent(searchValue)}`);
             const data = await response.json();
 
             if (data.status === "success") {
-                // Determine Tier Display
+                // Tier Logic
                 const t = data.tier ? data.tier.toString() : "3";
                 let tClass = "tier-3";
-                let tLabel = "Public Filing (Tier 3)";
-                
+                let tLabel = "Filing Pending (Tier 3)";
                 if (t === "1") { tClass = "tier-1"; tLabel = "Registry-Verified (Tier 1)"; }
-                else if (t === "2") { tClass = "tier-2"; tLabel = "Attested Record (Tier 2)"; }
+                else if (t === "2") { tClass = "tier-2"; tLabel = "Counterparty Attested (Tier 2)"; }
 
                 resultDiv.innerHTML = `<span style="color: var(--success);">✔ RECORD VALIDATED</span>`;
                 detailsDiv.style.display = "block";
                 
-                // Color for Government status
-                const govColor = (data.gov_verified && data.gov_verified.includes('MATCH')) ? 'var(--success)' : 'var(--warning)';
+                // Color SBIR.gov Status
+                const govStatus = data.gov_verified || "Pending Sync";
+                const govColor = govStatus.includes('Verified') || govStatus.includes('MATCH') ? 'var(--success)' : 'var(--warning)';
 
                 detailsDiv.innerHTML = `
                     <div style="text-align: center;"><span class="tier-badge ${tClass}">${tLabel}</span></div>
@@ -106,12 +101,12 @@
                     <div class="data-section">
                         <span class="section-label">Succession Metadata</span>
                         <div class="data-row"><span class="data-label">Award Number:</span> <span class="data-value">${data.award}</span></div>
-                        <div class="data-row"><span class="data-label">Federal Status:</span> <span class="data-value" style="font-weight:bold; color:${govColor};">${data.gov_verified || 'Pending Sync'}</span></div>
-                        <div class="data-row"><span class="data-label">Recorded Date:</span> <span class="data-value">${data.date}</span></div>
+                        <div class="data-row"><span class="data-label">SBIR.gov Status:</span> <span class="data-value" style="font-weight:bold; color:${govColor};">${govStatus}</span></div>
+                        <div class="data-row"><span class="data-label">Recorded On:</span> <span class="data-value">${data.date}</span></div>
                     </div>
 
                     <div class="data-section">
-                        <span class="section-label">Chain of Title</span>
+                        <span class="section-label">Verified Lineage</span>
                         <div class="data-row"><span class="data-label">Assignor:</span> <span class="data-value">${data.assignor}<br><small>UEI: ${data.assignor_uei}</small></span></div>
                         <div class="data-row" style="margin-top:8px;"><span class="data-label">Assignee:</span> <span class="data-value">${data.assignee}<br><small>UEI: ${data.assignee_uei}</small></span></div>
                     </div>
@@ -122,17 +117,16 @@
                     </div>
                 `;
             } else if (data.status === "error") {
-                resultDiv.innerHTML = `<span style="color: var(--danger);">REGISTRY BUSY</span>`;
+                resultDiv.innerHTML = `<span style="color: var(--danger);">REGISTRY ERROR</span>`;
                 detailsDiv.style.display = "block";
-                detailsDiv.innerHTML = `<p style="text-align:center; color: var(--gray);">The federal database is slow to respond. Please refresh or try again in 10 seconds.</p>`;
+                detailsDiv.innerHTML = `<p style="text-align:center; color: var(--gray);">Diagnostic: ${data.message}</p>`;
             } else {
                 resultDiv.innerHTML = `<span style="color: var(--danger);">✘ RECORD NOT FOUND</span>`;
                 detailsDiv.style.display = "block";
-                detailsDiv.innerHTML = `<p style="text-align:center; color: var(--gray);">No verified succession record exists for "<strong>${searchValue}</strong>".</p>`;
+                detailsDiv.innerHTML = `<p style="text-align:center; color: var(--gray);">No succession record exists for "<strong>${searchValue}</strong>".</p>`;
             }
         } catch (err) { 
             resultDiv.innerHTML = `<span style="color: var(--danger);">CONNECTION ERROR</span>`;
-            console.error(err);
         }
     }
 </script>
