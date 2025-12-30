@@ -89,9 +89,8 @@
                     <div class="data-section">
                         <span class="section-label">Registry Record Metadata</span>
                         <div class="data-row"><span class="data-label">Award Number:</span> <span class="data-value">${data.award}</span></div>
-                        <div class="data-row"><span class="data-label">Internal ID:</span> <span class="data-value">${data.id}</span></div>
                         <div class="data-row"><span class="data-label">SBIR Status:</span> <span class="data-value">${data.sbir_status}</span></div>
-                        <div class="data-row"><span class="data-label">Validation:</span> <span class="data-value">${data.counterparty_status}</span></div>
+                        <div class="data-row"><span class="data-label">Record Status:</span> <span class="data-value">${data.counterparty_status || 'Active'}</span></div>
                     </div>
                     <div class="data-section">
                         <span class="section-label">Verified Parties</span>
@@ -100,7 +99,7 @@
                     </div>
                     <div class="data-section">
                         <span class="section-label">Chain of Custody Timestamp</span>
-                        <div class="data-row"><span class="data-label">Recorded On:</span> <span class="data-value">${data.date || 'Pending'}</span></div>
+                        <div class="data-row"><span class="data-label">Recorded On:</span> <span class="data-value">${data.date || 'Registration in Progress'}</span></div>
                     </div>
                     <div class="data-section">
                         <span class="section-label">Cryptographic Fingerprint</span>
@@ -109,7 +108,7 @@
                 `;
             } else {
                 resultDiv.innerHTML = `<span style="color: #e74c3c;">✘ NO RECORD FOUND</span>`;
-                detailsDiv.innerHTML = `<p style="text-align:center; color:#7f8c8d;">No record found for "<strong>${searchValue}</strong>".<br><br>Ensure the record is set to "Show Publicly" in the registry.</p>`;
+                detailsDiv.innerHTML = `<p style="text-align:center; color:#7f8c8d;">No record found for "<strong>${searchValue}</strong>".<br><br>Verify the award number is correct and the record is active.</p>`;
             }
         } catch (err) { 
             resultDiv.innerHTML = `<span style="color: #e74c3c;">Connection Error</span>`;
