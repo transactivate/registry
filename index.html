@@ -7,7 +7,7 @@
     <style>
         :root { --primary: #2c3e50; --success: #27ae60; --warning: #e67e22; --danger: #e74c3c; --gray: #7f8c8d; --light-bg: #f4f7f6; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--light-bg); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
-        .container { background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 550px; text-align: center; border-top: 8px solid var(--primary); }
+        .container { background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 550px; text-align: center; border-top: 8px solid var(--primary); position: relative; }
         h1 { color: var(--primary); font-size: 1.8rem; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
         .subtitle { color: var(--gray); font-size: 0.95rem; margin-bottom: 2rem; }
         
@@ -16,9 +16,12 @@
         .manifesto p { margin: 0; font-size: 0.85rem; color: #34495e; line-height: 1.6; }
 
         input { width: 100%; padding: 14px; margin-bottom: 1rem; border: 1px solid #dce4ec; border-radius: 6px; box-sizing: border-box; font-size: 1rem; text-align: center; font-family: monospace; outline-color: var(--primary); }
-        .btn-main { width: 100%; padding: 15px; background-color: var(--primary); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.1s; }
-        .btn-main:active { transform: scale(0.98); }
+        .btn-main { width: 100%; padding: 15px; background-color: var(--primary); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; }
         
+        /* Print/PDF Button */
+        .btn-pdf { display: none; margin-top: 20px; width: 100%; padding: 12px; background-color: white; color: var(--primary); border: 2px solid var(--primary); border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+        .btn-pdf:hover { background-color: var(--primary); color: white; }
+
         .tier-badge { display: inline-block; padding: 8px 20px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; margin-bottom: 20px; }
         .tier-1 { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #2e7d32; }
         .tier-2 { background-color: #e3f2fd; color: #1565c0; border: 1px solid #1565c0; }
@@ -31,10 +34,20 @@
         .data-row { display: flex; justify-content: space-between; margin-bottom: 0.6rem; gap: 10px; }
         .data-label { font-weight: 700; color: var(--gray); min-width: 130px; }
         .data-value { text-align: right; word-break: break-word; }
-        .hash-display { background: #f9f9f9; padding: 12px; border: 1px dashed #bdc3c7; border-radius: 4px; font-family: monospace; font-size: 0.7rem; word-break: break-all; color: var(--primary); margin-top: 10px; line-height: 1.4; }
+        .hash-display { background: #f9f9f9; padding: 12px; border: 1px dashed #bdc3c7; border-radius: 4px; font-family: monospace; font-size: 0.7rem; word-break: break-all; color: var(--primary); margin-top: 10px; }
         
         .footer-link { margin-top: 25px; font-size: 0.85rem; color: var(--gray); }
-        .footer-link a { color: var(--primary); font-weight: bold; text-decoration: underline; }
+        .footer-link a { color: var(--primary); font-weight: bold; }
+
+        /* PDF/PRINT STYLES */
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; border: 1px solid #eee; max-width: 100%; width: 100%; border-top: 15px solid var(--primary); }
+            input, .btn-main, .btn-pdf, .footer-link, .manifesto { display: none !important; }
+            #details { display: block !important; border-top: none; }
+            h1::after { content: " | Official Recordation Certificate"; font-size: 1rem; color: var(--gray); display: block; margin-top: 5px; }
+            .hash-display { border: 1px solid #ddd; background: #fafafa; }
+        }
     </style>
 </head>
 <body>
@@ -57,6 +70,8 @@
     
     <div id="result"></div>
     <div id="details"></div>
+    
+    <button id="pdfBtn" class="btn-pdf" onclick="window.print()">Download Verification Certificate (PDF)</button>
 </div>
 
 <p class="footer-link">
@@ -70,18 +85,19 @@
         const searchValue = document.getElementById('searchField').value.trim();
         const resultDiv = document.getElementById('result');
         const detailsDiv = document.getElementById('details');
+        const pdfBtn = document.getElementById('pdfBtn');
         
         if (!searchValue) return;
 
         resultDiv.innerHTML = "Querying Registry Ledger...";
         detailsDiv.style.display = "none";
+        pdfBtn.style.display = "none";
 
         try {
             const response = await fetch(`${apiURL}?query=${encodeURIComponent(searchValue)}`);
             const data = await response.json();
 
             if (data.status === "success") {
-                // Tier Logic
                 const t = data.tier ? data.tier.toString() : "3";
                 let tClass = "tier-3";
                 let tLabel = "Filing Pending (Tier 3)";
@@ -90,8 +106,8 @@
 
                 resultDiv.innerHTML = `<span style="color: var(--success);">✔ RECORD VALIDATED</span>`;
                 detailsDiv.style.display = "block";
+                pdfBtn.style.display = "block"; // Show PDF button on success
                 
-                // Color SBIR.gov Status
                 const govStatus = data.gov_verified || "Pending Sync";
                 const govColor = govStatus.includes('Verified') || govStatus.includes('MATCH') ? 'var(--success)' : 'var(--warning)';
 
@@ -116,10 +132,6 @@
                         <div class="hash-display">${data.hash}</div>
                     </div>
                 `;
-            } else if (data.status === "error") {
-                resultDiv.innerHTML = `<span style="color: var(--danger);">REGISTRY ERROR</span>`;
-                detailsDiv.style.display = "block";
-                detailsDiv.innerHTML = `<p style="text-align:center; color: var(--gray);">Diagnostic: ${data.message}</p>`;
             } else {
                 resultDiv.innerHTML = `<span style="color: var(--danger);">✘ RECORD NOT FOUND</span>`;
                 detailsDiv.style.display = "block";
