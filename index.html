@@ -18,9 +18,7 @@
         input { width: 100%; padding: 14px; margin-bottom: 1rem; border: 1px solid #dce4ec; border-radius: 6px; box-sizing: border-box; font-size: 1rem; text-align: center; font-family: monospace; outline-color: var(--primary); }
         .btn-main { width: 100%; padding: 15px; background-color: var(--primary); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; }
         
-        /* Print/PDF Button */
-        .btn-pdf { display: none; margin-top: 20px; width: 100%; padding: 12px; background-color: white; color: var(--primary); border: 2px solid var(--primary); border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
-        .btn-pdf:hover { background-color: var(--primary); color: white; }
+        .btn-pdf { display: none; margin-top: 20px; width: 100%; padding: 12px; background-color: white; color: var(--primary); border: 2px solid var(--primary); border-radius: 6px; font-weight: bold; cursor: pointer; }
 
         .tier-badge { display: inline-block; padding: 8px 20px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; margin-bottom: 20px; }
         .tier-1 { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #2e7d32; }
@@ -39,14 +37,28 @@
         .footer-link { margin-top: 25px; font-size: 0.85rem; color: var(--gray); }
         .footer-link a { color: var(--primary); font-weight: bold; }
 
-        /* PDF/PRINT STYLES */
+        /* PDF/PRINT STYLES - REVISED FOR SINGLE PAGE */
         @media print {
-            body { background: white; padding: 0; }
-            .container { box-shadow: none; border: 1px solid #eee; max-width: 100%; width: 100%; border-top: 15px solid var(--primary); }
-            input, .btn-main, .btn-pdf, .footer-link, .manifesto { display: none !important; }
-            #details { display: block !important; border-top: none; }
-            h1::after { content: " | Official Recordation Certificate"; font-size: 1rem; color: var(--gray); display: block; margin-top: 5px; }
-            .hash-display { border: 1px solid #ddd; background: #fafafa; }
+            @page { margin: 0.5cm; } /* Reduces overall page margins */
+            body { background: white; padding: 0; margin: 0; }
+            .container { 
+                box-shadow: none !important; 
+                border: 1px solid #eee !important; 
+                max-width: 100% !important; 
+                width: 95% !important; 
+                margin: 0 auto !important; 
+                padding: 1.5rem !important; /* Shrunk padding */
+                border-top: 10px solid var(--primary) !important;
+                page-break-inside: avoid; /* Prevents splitting into two pages */
+            }
+            input, .btn-main, .btn-pdf, .footer-link, .manifesto, .subtitle { display: none !important; }
+            #details { display: block !important; border-top: none; padding-top: 0.5rem; }
+            #result { margin-top: 0.5rem; font-size: 1.1rem; }
+            .data-section { margin-bottom: 1rem; } /* Tighter spacing */
+            .tier-badge { margin-bottom: 10px; padding: 5px 15px; }
+            h1 { font-size: 1.4rem; }
+            h1::after { content: " | Official Recordation Certificate"; font-size: 0.85rem; color: var(--gray); display: block; margin-top: 2px; }
+            .hash-display { font-size: 0.65rem; padding: 8px; margin-top: 5px; }
         }
     </style>
 </head>
@@ -106,7 +118,7 @@
 
                 resultDiv.innerHTML = `<span style="color: var(--success);">✔ RECORD VALIDATED</span>`;
                 detailsDiv.style.display = "block";
-                pdfBtn.style.display = "block"; // Show PDF button on success
+                pdfBtn.style.display = "block";
                 
                 const govStatus = data.gov_verified || "Pending Sync";
                 const govColor = govStatus.includes('Verified') || govStatus.includes('MATCH') ? 'var(--success)' : 'var(--warning)';
