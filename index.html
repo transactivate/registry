@@ -37,28 +37,45 @@
         .footer-link { margin-top: 25px; font-size: 0.85rem; color: var(--gray); }
         .footer-link a { color: var(--primary); font-weight: bold; }
 
-        /* PDF/PRINT STYLES - REVISED FOR SINGLE PAGE */
+        /* --- PDF/PRINT OPTIMIZATION --- */
         @media print {
-            @page { margin: 0.5cm; } /* Reduces overall page margins */
-            body { background: white; padding: 0; margin: 0; }
+            @page { 
+                margin: 0; /* Remove browser header/footer */
+                size: portrait;
+            }
+            html, body { 
+                height: 100%; 
+                margin: 0 !important; 
+                padding: 0 !important; 
+                overflow: hidden; /* Hard cut-off to prevent page 2 */
+            }
+            body { 
+                display: block; /* Disable flexbox for print to avoid spacing issues */
+            }
             .container { 
                 box-shadow: none !important; 
-                border: 1px solid #eee !important; 
+                border: none !important; 
+                width: 100% !important; 
                 max-width: 100% !important; 
-                width: 95% !important; 
-                margin: 0 auto !important; 
-                padding: 1.5rem !important; /* Shrunk padding */
-                border-top: 10px solid var(--primary) !important;
-                page-break-inside: avoid; /* Prevents splitting into two pages */
+                margin: 0 !important; 
+                padding: 3rem !important;
+                border-top: 15px solid var(--primary) !important;
+                height: auto;
             }
             input, .btn-main, .btn-pdf, .footer-link, .manifesto, .subtitle { display: none !important; }
-            #details { display: block !important; border-top: none; padding-top: 0.5rem; }
-            #result { margin-top: 0.5rem; font-size: 1.1rem; }
-            .data-section { margin-bottom: 1rem; } /* Tighter spacing */
-            .tier-badge { margin-bottom: 10px; padding: 5px 15px; }
-            h1 { font-size: 1.4rem; }
-            h1::after { content: " | Official Recordation Certificate"; font-size: 0.85rem; color: var(--gray); display: block; margin-top: 2px; }
-            .hash-display { font-size: 0.65rem; padding: 8px; margin-top: 5px; }
+            #details { display: block !important; border-top: none; padding-top: 0; }
+            #result { margin-top: 0; font-size: 1.2rem; }
+            h1 { font-size: 1.6rem; text-align: left; }
+            h1::after { 
+                content: "Official Recordation Certificate"; 
+                font-size: 0.9rem; 
+                color: var(--gray); 
+                display: block; 
+                font-weight: normal;
+                margin-top: 5px;
+            }
+            .data-section { page-break-inside: avoid; margin-bottom: 1.2rem; }
+            .hash-display { border: 1px solid #eee; }
         }
     </style>
 </head>
@@ -114,7 +131,7 @@
                 let tClass = "tier-3";
                 let tLabel = "Filing Pending (Tier 3)";
                 if (t === "1") { tClass = "tier-1"; tLabel = "Registry-Verified (Tier 1)"; }
-                else if (t === "2") { tClass = "tier-2"; tLabel = "Counterparty Attested (Tier 2)"; }
+                else if (t === "2") { tClass = "tier-2"; tLabel = "Attested Record (Tier 2)"; }
 
                 resultDiv.innerHTML = `<span style="color: var(--success);">✔ RECORD VALIDATED</span>`;
                 detailsDiv.style.display = "block";
