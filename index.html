@@ -11,25 +11,23 @@
         h1 { color: var(--primary); font-size: 1.8rem; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
         .subtitle { color: var(--gray); font-size: 0.95rem; margin-bottom: 2rem; }
         
-        /* --- Manifesto & Legend --- */
+        /* --- VERIFICATION LEGEND (MANIFESTO STYLE) --- */
         .manifesto { text-align: left; background: #f8fafb; border-radius: 8px; padding: 18px; margin-bottom: 25px; border-left: 4px solid var(--primary); }
-        .manifesto h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 15px 0; color: var(--primary); }
-        .verification-step { margin-bottom: 15px; }
-        .verification-step strong { display: block; font-size: 0.85rem; color: var(--primary); margin-bottom: 4px; }
-        .verification-step p { margin: 0; font-size: 0.8rem; color: #576574; line-height: 1.4; }
+        .manifesto h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 0; color: var(--primary); }
+        .manifesto p { margin: 0; font-size: 0.82rem; color: #34495e; line-height: 1.6; }
+        .legend-section { margin-top: 10px; padding-top: 10px; border-top: 1px solid #e0e6ed; }
 
         input { width: 100%; padding: 14px; margin-bottom: 1rem; border: 1px solid #dce4ec; border-radius: 6px; box-sizing: border-box; font-size: 1rem; text-align: center; font-family: monospace; outline-color: var(--primary); }
-        .btn-main { width: 100%; padding: 15px; background-color: var(--primary); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-        .btn-main:hover { background-color: #34495e; }
-        
+        .btn-main { width: 100%; padding: 15px; background-color: var(--primary); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; }
         .btn-pdf { display: none; margin-top: 20px; width: 100%; padding: 12px; background-color: white; color: var(--primary); border: 2px solid var(--primary); border-radius: 6px; font-weight: bold; cursor: pointer; }
 
-        /* --- Tiers & Badges --- */
-        .tier-badge { display: inline-block; padding: 8px 20px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; margin-bottom: 20px; }
-        .tier-1 { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #2e7d32; }
-        .tier-2 { background-color: #e3f2fd; color: #1565c0; border: 1px solid #1565c0; }
-        .tier-3 { background-color: #fff3e0; color: #ef6c00; border: 1px solid #ef6c00; }
+        /* --- DUAL BADGE STYLING --- */
+        .badge-container { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; }
+        .badge { padding: 6px 14px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; border: 1px solid transparent; }
+        .badge-contract { background: #fff8e1; color: #b7791f; border-color: #f6e05e; }
+        .badge-gov { background: #ebf8ff; color: #2b6cb0; border-color: #90cdf4; }
 
+        /* --- DATA DISPLAY --- */
         #result { margin-top: 2rem; font-weight: bold; font-size: 1.2rem; }
         #details { margin-top: 1.5rem; text-align: left; font-size: 0.9rem; color: #34495e; border-top: 1px solid #eee; padding-top: 1.5rem; display: none; }
         .data-section { margin-bottom: 1.5rem; }
@@ -42,6 +40,7 @@
         .footer-link { margin-top: 25px; font-size: 0.85rem; color: var(--gray); }
         .footer-link a { color: var(--primary); font-weight: bold; }
 
+        /* --- PDF/PRINT OPTIMIZATION --- */
         @media print {
             @page { margin: 0; size: portrait; }
             html, body { height: 100%; margin: 0 !important; padding: 0 !important; overflow: hidden; }
@@ -65,20 +64,12 @@
 
     <div class="manifesto">
         <h3>Verification Legend</h3>
+        <p><strong>Factor 1: Transactional Proof</strong></p>
+        <p>Tier 1 (Broker-Led), Tier 2 (Two-Party Attestation), or Tier 3 (Self-Reported).</p>
         
-        <div class="verification-step">
-            <strong>🥇 Title Confirmed</strong>
-            <p>Federal records match the Seller's ID (UEI). Confirms the right to sell and transfer lineage.</p>
-        </div>
-
-        <div class="verification-step">
-            <strong>🤝 Succession Logged</strong>
-            <p>The transfer from Assignor to Assignee has been officially recorded in our registry.</p>
-        </div>
-
-        <div class="verification-step">
-            <strong>⚠️ Identity Mismatch</strong>
-            <p>The award is real, but the Seller is not yet verified as the owner in federal databases.</p>
+        <div class="legend-section">
+            <p><strong>Factor 2: Federal Title Search</strong></p>
+            <p>🥇 Confirmed (UEI Match), 🥈 Found (Award Match), or 🥉 Syncing (Pending Database Update).</p>
         </div>
     </div>
     
@@ -106,7 +97,7 @@
         
         if (!searchValue) return;
 
-        resultDiv.innerHTML = "Querying Registry Ledger...";
+        resultDiv.innerHTML = "Querying Audit Ledger...";
         detailsDiv.style.display = "none";
         pdfBtn.style.display = "none";
 
@@ -115,29 +106,25 @@
             const data = await response.json();
 
             if (data.status === "success") {
-                const t = data.tier ? data.tier.toString() : "3";
-                let tClass = "tier-3";
-                let tLabel = "Processing Record (Tier 3)";
-                if (t === "1") { tClass = "tier-1"; tLabel = "Audited Record (Tier 1)"; }
-                else if (t === "2") { tClass = "tier-2"; tLabel = "Attested Record (Tier 2)"; }
-
                 resultDiv.innerHTML = `<span style="color: var(--success);">✔ RECORD VALIDATED</span>`;
                 detailsDiv.style.display = "block";
                 pdfBtn.style.display = "block";
-                
-                // Color logic for the new Clearinghouse status
-                const govStatus = data.gov_verified || "Pending Audit";
-                let govColor = 'var(--warning)';
-                if (govStatus.includes('Confirmed')) govColor = 'var(--success)';
-                if (govStatus.includes('Logged')) govColor = 'var(--primary)';
+
+                // Handling the Two-Factor Status
+                const s = data.gov_verified || "Pending Sync";
+                let contractPart = s.split('|')[0] ? s.split('|')[0].trim() : "Record Logged";
+                let govPart = s.split('|')[1] ? s.split('|')[1].trim() : "🥉 Sync Pending";
 
                 detailsDiv.innerHTML = `
-                    <div style="text-align: center;"><span class="tier-badge ${tClass}">${tLabel}</span></div>
+                    <div class="badge-container">
+                        <span class="badge badge-contract">${contractPart}</span>
+                        <span class="badge badge-gov">${govPart}</span>
+                    </div>
                     
                     <div class="data-section">
                         <span class="section-label">Succession Metadata</span>
                         <div class="data-row"><span class="data-label">Award Number:</span> <span class="data-value">${data.award}</span></div>
-                        <div class="data-row"><span class="data-label">Status:</span> <span class="data-value" style="font-weight:bold; color:${govColor};">${govStatus}</span></div>
+                        <div class="data-row"><span class="data-label">Verification:</span> <span class="data-value" style="font-weight:bold;">Verified</span></div>
                         <div class="data-row"><span class="data-label">Recorded On:</span> <span class="data-value">${data.date}</span></div>
                     </div>
 
