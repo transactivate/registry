@@ -14,6 +14,7 @@
         .manifesto { text-align: left; background: #f8fafb; border-radius: 8px; padding: 18px; margin-bottom: 25px; border-left: 4px solid var(--primary); }
         .manifesto h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 0; color: var(--primary); }
         .manifesto p { margin: 0; font-size: 0.85rem; color: #34495e; line-height: 1.6; }
+        .status-desc { display: block; font-size: 0.75rem; color: var(--gray); margin-bottom: 10px; font-style: italic; }
 
         input { width: 100%; padding: 14px; margin-bottom: 1rem; border: 1px solid #dce4ec; border-radius: 6px; box-sizing: border-box; font-size: 1rem; text-align: center; font-family: monospace; outline-color: var(--primary); }
         .btn-main { width: 100%; padding: 15px; background-color: var(--primary); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; }
@@ -37,43 +38,16 @@
         .footer-link { margin-top: 25px; font-size: 0.85rem; color: var(--gray); }
         .footer-link a { color: var(--primary); font-weight: bold; }
 
-        /* --- PDF/PRINT OPTIMIZATION --- */
         @media print {
-            @page { 
-                margin: 0; /* Remove browser header/footer */
-                size: portrait;
-            }
-            html, body { 
-                height: 100%; 
-                margin: 0 !important; 
-                padding: 0 !important; 
-                overflow: hidden; /* Hard cut-off to prevent page 2 */
-            }
-            body { 
-                display: block; /* Disable flexbox for print to avoid spacing issues */
-            }
-            .container { 
-                box-shadow: none !important; 
-                border: none !important; 
-                width: 100% !important; 
-                max-width: 100% !important; 
-                margin: 0 !important; 
-                padding: 3rem !important;
-                border-top: 15px solid var(--primary) !important;
-                height: auto;
-            }
+            @page { margin: 0; size: portrait; }
+            html, body { height: 100%; margin: 0 !important; padding: 0 !important; overflow: hidden; }
+            body { display: block; }
+            .container { box-shadow: none !important; border: none !important; width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 3rem !important; border-top: 15px solid var(--primary) !important; height: auto; }
             input, .btn-main, .btn-pdf, .footer-link, .manifesto, .subtitle { display: none !important; }
             #details { display: block !important; border-top: none; padding-top: 0; }
             #result { margin-top: 0; font-size: 1.2rem; }
             h1 { font-size: 1.6rem; text-align: left; }
-            h1::after { 
-                content: "Official Recordation Certificate"; 
-                font-size: 0.9rem; 
-                color: var(--gray); 
-                display: block; 
-                font-weight: normal;
-                margin-top: 5px;
-            }
+            h1::after { content: "Official Recordation Certificate"; font-size: 0.9rem; color: var(--gray); display: block; font-weight: normal; margin-top: 5px; }
             .data-section { page-break-inside: avoid; margin-bottom: 1.2rem; }
             .hash-display { border: 1px solid #eee; }
         }
@@ -88,9 +62,14 @@
     <div class="manifesto">
         <h3>Verification Legend</h3>
         <p>
-            <strong>Tier 1:</strong> Fully audited legal chain of title.<br>
-            <strong>Tier 2:</strong> Multi-party attested succession.<br>
-            <strong>Tier 3:</strong> Self-reported; registration in progress.
+            <strong>✅ Title Verified:</strong> User UEI matches official Federal record.
+            <span class="status-desc">Confirmed legal chain of custody for Phase III transition.</span>
+            
+            <strong>🔵 SBIR Verified:</strong> Award exists on SBIR.gov; UEI reconciliation pending.
+            <span class="status-desc">Technical lineage confirmed; owner verification required.</span>
+            
+            <strong>🟠 Pending:</strong> Award submitted; awaiting automated forensic sync.
+            <span class="status-desc">Initial recordation in progress.</span>
         </p>
     </div>
     
@@ -138,7 +117,7 @@
                 pdfBtn.style.display = "block";
                 
                 const govStatus = data.gov_verified || "Pending Sync";
-                const govColor = govStatus.includes('Verified') || govStatus.includes('MATCH') ? 'var(--success)' : 'var(--warning)';
+                const govColor = govStatus.includes('✅') ? 'var(--success)' : (govStatus.includes('🔵') ? 'var(--primary)' : 'var(--warning)');
 
                 detailsDiv.innerHTML = `
                     <div style="text-align: center;"><span class="tier-badge ${tClass}">${tLabel}</span></div>
@@ -146,7 +125,7 @@
                     <div class="data-section">
                         <span class="section-label">Succession Metadata</span>
                         <div class="data-row"><span class="data-label">Award Number:</span> <span class="data-value">${data.award}</span></div>
-                        <div class="data-row"><span class="data-label">SBIR.gov Status:</span> <span class="data-value" style="font-weight:bold; color:${govColor};">${govStatus}</span></div>
+                        <div class="data-row"><span class="data-label">Verification:</span> <span class="data-value" style="font-weight:bold; color:${govColor};">${govStatus}</span></div>
                         <div class="data-row"><span class="data-label">Recorded On:</span> <span class="data-value">${data.date}</span></div>
                     </div>
 
