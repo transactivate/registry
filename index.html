@@ -6,43 +6,29 @@
     <title>Transactivate | SBIR Lineage Registry</title>
     <style>
         :root { --primary: #112e51; --success: #27ae60; --warning: #e67e22; --blue: #005ea2; --gray: #5b616b; --light-bg: #f0f0f0; }
-        body { font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; background-color: var(--light-bg); display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; color: #1b1b1b; }
-        
+        body { font-family: 'Source Sans Pro', sans-serif; background-color: var(--light-bg); display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; color: #1b1b1b; }
         .container { background: white; padding: 2.5rem; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 680px; text-align: center; border-top: 10px solid var(--primary); }
-        
         h1 { color: var(--primary); font-size: 2rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px; }
         .subtitle { color: var(--gray); font-size: 1rem; margin-bottom: 2.5rem; font-weight: 400; }
-        
-        /* --- LEGEND: THE AUDIT STANDARDS --- */
         .protocol-box { text-align: left; background: #f9f9f9; border: 1px solid #d6d7d9; padding: 24px; margin-bottom: 25px; }
         .protocol-box h3 { font-size: 0.9rem; text-transform: uppercase; margin-top: 0; color: var(--primary); border-bottom: 2px solid #efefef; padding-bottom: 10px; margin-bottom: 15px; }
-        
         .factor-group { margin-bottom: 22px; }
         .factor-title { font-weight: 700; font-size: 1rem; color: #1b1b1b; display: block; margin-bottom: 8px; }
-        
         .tier-definition { background: white; padding: 12px; border: 1px solid #dfe1e2; border-left: 4px solid #adadad; margin-bottom: 8px; font-size: 0.85rem; line-height: 1.5; }
         .tier-definition strong { color: var(--primary); }
-
-        input { width: 100%; padding: 16px; margin-bottom: 1rem; border: 2px solid #5b616b; border-radius: 0; box-sizing: border-box; font-size: 1.1rem; text-align: center; font-family: 'Public Sans', monospace; outline: none; }
+        input { width: 100%; padding: 16px; margin-bottom: 1rem; border: 2px solid #5b616b; border-radius: 0; box-sizing: border-box; font-size: 1.1rem; text-align: center; font-family: monospace; outline: none; }
         .btn-main { width: 100%; padding: 16px; background-color: var(--blue); color: white; border: none; border-radius: 3px; font-size: 1.1rem; font-weight: 700; cursor: pointer; text-transform: uppercase; }
-        .btn-main:hover { background-color: #1a4480; }
         .btn-pdf { display: none; margin-top: 25px; width: 100%; padding: 14px; background-color: white; color: var(--blue); border: 2px solid var(--blue); font-weight: 700; cursor: pointer; text-transform: uppercase; }
-
-        /* --- SEARCH RESULT UI --- */
         .owner-header { background: #e7f3ff; padding: 24px; border: 1px solid #71b5ff; margin-bottom: 20px; text-align: center; }
         .owner-label { font-size: 0.8rem; color: var(--blue); text-transform: uppercase; font-weight: 700; letter-spacing: 1px; display: block; margin-bottom: 8px; }
         .owner-name { font-size: 1.5rem; color: var(--primary); font-weight: 800; line-height: 1.2; display: block; }
         .owner-uei { font-family: monospace; font-size: 1rem; color: #1b1b1b; margin-top: 8px; display: block; font-weight: 600; }
-
         .badge-container { display: flex; justify-content: center; gap: 12px; margin-bottom: 20px; }
         .badge { padding: 8px 16px; border-radius: 2px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
         .badge-contract { background: #fff1d2; color: #8e7032; border: 1px solid #f9c642; }
         .badge-gov { background: #e1f3f8; color: #0050d8; border: 1px solid #00aef1; }
-
         .audit-summary { background: #f0f0f0; border-left: 6px solid var(--primary); padding: 20px; margin-bottom: 20px; text-align: left; }
         .audit-text { font-size: 0.95rem; line-height: 1.6; color: #1b1b1b; }
-
-        #result { margin-top: 2rem; font-weight: bold; font-size: 1.2rem; }
         #details { margin-top: 1.5rem; text-align: left; font-size: 0.95rem; border-top: 1px solid #dfe1e2; padding-top: 2rem; display: none; }
         .data-section { margin-bottom: 2rem; }
         .section-label { font-size: 0.8rem; color: var(--gray); text-transform: uppercase; letter-spacing: 2px; display: block; border-bottom: 2px solid #efefef; padding-bottom: 8px; margin-bottom: 12px; font-weight: 700; }
@@ -50,11 +36,9 @@
         .data-label { font-weight: 400; color: var(--gray); }
         .data-value { text-align: right; font-weight: 700; }
         .tier-explanation { font-size: 0.85rem; color: #5b616b; background: #f9f9f9; padding: 10px; border-radius: 4px; margin-top: 5px; display: block; line-height: 1.4; border-left: 3px solid #d6d7d9; }
-        .hash-display { background: #f1f1f1; padding: 15px; font-family: 'Public Sans', monospace; font-size: 0.75rem; word-break: break-all; color: var(--primary); margin-top: 12px; border: 1px solid #d6d7d9; line-height: 1.4; }
-        
+        .hash-display { background: #f1f1f1; padding: 15px; font-family: monospace; font-size: 0.75rem; word-break: break-all; color: var(--primary); margin-top: 12px; border: 1px solid #d6d7d9; line-height: 1.4; }
         .footer-link { margin-top: 30px; font-size: 0.9rem; color: var(--gray); }
         .footer-link a { color: var(--blue); font-weight: 700; text-decoration: none; border-bottom: 2px solid #d1e1f3; }
-
         @media print {
             @page { margin: 1cm; size: portrait; }
             body { background: white; padding: 0; }
@@ -67,79 +51,68 @@
     </style>
 </head>
 <body>
-
 <div class="container">
     <h1>Transactivate</h1>
     <p class="subtitle">SBIR Succession & Lineage Registry</p>
-
     <div class="protocol-box">
         <h3>Verification Standards</h3>
-        
         <div class="factor-group">
-            <span class="factor-title">Factor 1: Transactional Attestation (The Handshake)</span>
+            <span class="factor-title">Factor 1: Transactional Attestation</span>
             <div class="tier-definition"><strong>Tier 1: Brokered</strong> – transactivate facilitated and witnessed the legal deal between parties.</div>
             <div class="tier-definition"><strong>Tier 2: Dual Attestation</strong> – Both the buyer and seller formally attested that the transaction occurred.</div>
             <div class="tier-definition"><strong>Tier 3: Single Attestation</strong> – Only one party has formally attested to the transaction.</div>
             <div class="tier-definition"><strong>Verified Precedent:</strong> Forensic proof of a historical technical purchase (proven by a Phase III award).</div>
         </div>
-        
         <div class="factor-group" style="margin-bottom: 0;">
-            <span class="factor-title">Factor 2: Government Data Match (The Title)</span>
+            <span class="factor-title">Factor 2: Government Data Match</span>
             <p style="font-size: 0.85rem; color: #5b616b; line-height: 1.6; margin: 0;">We confirm that the Award # and Seller UEI match the records currently held in official federal procurement databases.</p>
         </div>
     </div>
-    
     <input type="text" id="searchField" placeholder="Enter Award ID or Registry Fingerprint">
     <button class="btn-main" onclick="verifyRecord()">Verify Registry Record</button>
-    
     <div id="result"></div>
     <div id="details"></div>
-    
     <button id="pdfBtn" class="btn-pdf" onclick="window.print()">Download Audit Certificate (PDF)</button>
 </div>
-
-<p class="footer-link">
-    Missing a record? <a href="https://tally.so/r/kd9VKd" target="_blank">Initiate a New Filing</a>
-</p>
+<p class="footer-link">Missing a record? <a href="https://tally.so/r/kd9VKd" target="_blank">Initiate a New Filing</a></p>
 
 <script>
     const apiURL = "https://script.google.com/macros/s/AKfycbxqdJ9ignCg3pHamagZwkRExEyPExoHEivYuLjib66MRSeCXKOnXSgHVGPt9Eoxk0jp/exec"; 
-
     async function verifyRecord() {
         const searchValue = document.getElementById('searchField').value.trim();
         const resultDiv = document.getElementById('result');
         const detailsDiv = document.getElementById('details');
         const pdfBtn = document.getElementById('pdfBtn');
-        
         if (!searchValue) return;
-
         resultDiv.innerHTML = "<span style='color: var(--gray);'>Reconciling with Federal Databases...</span>";
         detailsDiv.style.display = "none";
         pdfBtn.style.display = "none";
-
         try {
             const response = await fetch(`${apiURL}?query=${encodeURIComponent(searchValue)}`);
             const data = await response.json();
-
             if (data.status === "success") {
                 resultDiv.innerHTML = `<span style="color: var(--success);">✔ SUCCESSION VALIDATED</span>`;
                 detailsDiv.style.display = "block";
                 pdfBtn.style.display = "block";
-
                 const s = data.gov_verified || "";
                 let govPart = s.split('|')[1] ? s.split('|')[1].trim() : "🥉 Sync Pending";
 
-                // --- DYNAMIC AUDIT LOGIC ---
-                let auditText = "This buyer did not win the original Phase I or II, but is the confirmed winner of the subsequent Phase III. This indicates a verified purchase of technical lineage.";
-                let tierExp = "Historical Precedent: Lineage proven by historical government contract data.";
+                let auditText = "";
+                let tierExp = "";
                 
-                if (data.tier.includes("Tier 1")) {
+                // --- FIX: ELITE HISTORICAL LOGIC ---
+                const isPrecedent = (data.tier.includes("Tier 3") && data.assignor.includes("Protected Legacy"));
+                
+                if (isPrecedent) {
+                    auditText = "This buyer did not win the original Phase I or II, but is the confirmed winner of the subsequent Phase III. This indicates a verified purchase of technical lineage proven by historical government contract data.";
+                    tierExp = "Historical Precedent: Lineage proven by historical government contract data.";
+                } else if (data.tier.includes("Tier 1")) {
                     auditText = "transactivate brokered and witnessed the deal between the buyer and the seller. This represents the highest level of transactional certainty.";
                     tierExp = "Verified via Transactivate Brokerage: Deal witnessed by a neutral third party.";
                 } else if (data.tier.includes("Tier 2")) {
                     auditText = "Both the buyer and the seller formally attested that this SBIR transaction occurred. The administrative record is complete.";
                     tierExp = "Dual Attestation: Both parties have formally ledgered this transaction.";
-                } else if (data.tier.includes("Tier 3")) {
+                } else {
                     auditText = "A single party has attested to this transaction. Full dual-attestation is required to reach Tier 2 status.";
                     tierExp = "Single Attestation: Only one party has formally logged this transaction.";
                 }
@@ -149,20 +122,15 @@
                         <span class="badge badge-contract">${s.split('|')[0] || "Record Logged"}</span>
                         <span class="badge badge-gov">${govPart}</span>
                     </div>
-
                     <div class="owner-header">
                         <span class="owner-label">Verified Successor (Current Owner)</span>
                         <span class="owner-name">${data.assignee}</span>
                         <span class="owner-uei">UEI: ${data.assignee_uei}</span>
                     </div>
-
                     <div class="audit-summary">
                         <p class="audit-text"><strong>Registry Finding:</strong> ${auditText}</p>
-                        <p class="audit-text" style="margin-top:10px; font-weight:700; border-top:1px solid #d6d7d9; padding-top:10px; font-size:0.85rem;">
-                            Verification: We confirmed that the award # and seller UEI match official government databases.
-                        </p>
+                        <p class="audit-text" style="margin-top:10px; font-weight:700; border-top:1px solid #d6d7d9; padding-top:10px; font-size:0.85rem;">Verification: We confirmed that the award # and seller UEI match official government databases.</p>
                     </div>
-                    
                     <div class="data-section">
                         <span class="section-label">Registry Metadata</span>
                         <div class="data-row"><span class="data-label">Federal Award ID:</span> <span class="data-value">${data.award}</span></div>
@@ -170,25 +138,17 @@
                         <span class="tier-explanation">${tierExp}</span>
                         <div class="data-row" style="margin-top:10px;"><span class="data-label">Date Ledgered:</span> <span class="data-value">${data.date}</span></div>
                     </div>
-
                     <div class="data-section">
                         <span class="section-label">Historical Lineage</span>
                         <div class="data-row"><span class="data-label">Original Owner (Seller):</span> <span class="data-value">${data.assignor}<br><small>UEI: ${data.assignor_uei}</small></span></div>
                     </div>
-
-                    <div class="data-section">
-                        <span class="section-label">Cryptographic Fingerprint (SHA-256)</span>
-                        <div class="hash-display">${data.hash}</div>
-                    </div>
-                `;
+                    <div class="data-section"><span class="section-label">Cryptographic Fingerprint (SHA-256)</span><div class="hash-display">${data.hash}</div></div>`;
             } else {
                 resultDiv.innerHTML = `<span style="color: var(--danger);">✘ NO RECORD FOUND</span>`;
                 detailsDiv.style.display = "block";
-                detailsDiv.innerHTML = `<p style="text-align:center; color: var(--gray); font-size: 0.9rem;">No succession record exists for this award ID in the transactivate registry.</p>`;
+                detailsDiv.innerHTML = `<p style="text-align:center; color: var(--gray); font-size: 0.9rem;">No record exists for this award ID in the registry.</p>`;
             }
-        } catch (err) { 
-            resultDiv.innerHTML = `<span style="color: var(--danger);">REGISTRY OFFLINE</span>`;
-        }
+        } catch (err) { resultDiv.innerHTML = `<span style="color: var(--danger);">REGISTRY OFFLINE</span>`; }
     }
 </script>
 </body>
