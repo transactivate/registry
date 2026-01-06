@@ -6,59 +6,46 @@
     <title>Transactivate | SBIR Lineage Registry</title>
     <style>
         :root { --primary: #2c3e50; --success: #27ae60; --warning: #e67e22; --blue: #2b6cb0; --gray: #7f8c8d; --light-bg: #f4f7f6; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--light-bg); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--light-bg); display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
         
-        .container { background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 580px; text-align: center; border-top: 8px solid var(--primary); position: relative; }
+        .container { background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 640px; text-align: center; border-top: 8px solid var(--primary); }
         
-        h1 { color: var(--primary); font-size: 1.8rem; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
+        h1 { color: var(--primary); font-size: 1.8rem; margin-bottom: 0.5rem; }
         .subtitle { color: var(--gray); font-size: 0.95rem; margin-bottom: 2rem; }
         
-        /* --- TWO-KEY PROTOCOL MANIFESTO --- */
-        .manifesto { text-align: left; background: #f8fafb; border-radius: 8px; padding: 22px; margin-bottom: 25px; border-left: 4px solid var(--primary); }
-        .manifesto h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 0; color: var(--primary); margin-bottom: 12px; }
-        .manifesto p { margin: 0 0 12px 0; font-size: 0.88rem; color: #34495e; line-height: 1.5; }
-        .legend-section { margin-top: 15px; padding-top: 12px; border-top: 1px solid #e0e6ed; }
-        .legend-label { font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
-        .legend-desc { font-size: 0.78rem; color: #7f8c8d; margin-left: 22px; line-height: 1.4; }
-
-        input { width: 100%; padding: 16px; margin-bottom: 1rem; border: 2px solid #dce4ec; border-radius: 6px; box-sizing: border-box; font-size: 1.1rem; text-align: center; font-family: monospace; outline: none; transition: border-color 0.2s; }
-        input:focus { border-color: var(--primary); }
+        /* --- PROTOCOL DEFINITIONS --- */
+        .protocol-box { text-align: left; background: #f8fafb; border-radius: 8px; padding: 24px; margin-bottom: 25px; border: 1px solid #eef2f5; }
+        .protocol-box h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 0; color: var(--primary); border-bottom: 2px solid #dce4ec; padding-bottom: 8px; margin-bottom: 15px; }
         
-        .btn-main { width: 100%; padding: 16px; background-color: var(--primary); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
-        .btn-main:hover { background-color: #1a252f; transform: translateY(-1px); }
-        .btn-pdf { display: none; margin-top: 20px; width: 100%; padding: 12px; background-color: white; color: var(--primary); border: 2px solid var(--primary); border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .factor-group { margin-bottom: 18px; }
+        .factor-title { font-weight: 800; font-size: 0.95rem; color: #2c3e50; display: block; margin-bottom: 4px; }
+        .factor-desc { font-size: 0.85rem; color: #576574; line-height: 1.5; }
 
-        /* --- DUAL BADGE STYLING --- */
+        input { width: 100%; padding: 16px; margin-bottom: 1rem; border: 2px solid #dce4ec; border-radius: 6px; box-sizing: border-box; font-size: 1.1rem; text-align: center; font-family: monospace; outline: none; }
+        .btn-main { width: 100%; padding: 16px; background-color: var(--primary); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+
+        /* --- BADGE STYLING --- */
         .badge-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
-        .badge { padding: 8px 16px; border-radius: 4px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; border: 1px solid transparent; letter-spacing: 0.5px; }
+        .badge { padding: 8px 16px; border-radius: 4px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; border: 1px solid transparent; }
         .badge-contract { background: #fff8e1; color: #b7791f; border-color: #f6e05e; }
         .badge-gov { background: #ebf8ff; color: #2b6cb0; border-color: #90cdf4; }
+
+        /* --- THE AUDIT RESULT BOX --- */
+        .audit-summary { background: #f0f4f8; border-left: 5px solid var(--blue); padding: 20px; border-radius: 4px; margin-top: 20px; text-align: left; }
+        .audit-title { color: var(--primary); font-weight: 800; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 8px; display: block; letter-spacing: 0.5px; }
+        .audit-text { font-size: 0.88rem; color: #34495e; line-height: 1.5; }
 
         /* --- DATA DISPLAY --- */
         #result { margin-top: 2rem; font-weight: bold; font-size: 1.2rem; }
         #details { margin-top: 1.5rem; text-align: left; font-size: 0.9rem; color: #34495e; border-top: 1px solid #eee; padding-top: 1.5rem; display: none; }
         .data-section { margin-bottom: 1.5rem; }
-        .section-label { font-size: 0.75rem; color: var(--gray); text-transform: uppercase; letter-spacing: 1.2px; display: block; border-bottom: 1px solid #f1f1f1; padding-bottom: 5px; margin-bottom: 10px; }
-        .data-row { display: flex; justify-content: space-between; margin-bottom: 0.6rem; gap: 10px; }
-        .data-label { font-weight: 700; color: var(--gray); min-width: 140px; }
-        .data-value { text-align: right; word-break: break-word; font-weight: 500; }
-        .hash-display { background: #f9f9f9; padding: 14px; border: 1px dashed #bdc3c7; border-radius: 4px; font-family: monospace; font-size: 0.7rem; word-break: break-all; color: var(--primary); margin-top: 10px; line-height: 1.4; }
+        .section-label { font-size: 0.72rem; color: var(--gray); text-transform: uppercase; letter-spacing: 1.2px; display: block; border-bottom: 1px solid #f1f1f1; padding-bottom: 5px; margin-bottom: 10px; }
+        .data-row { display: flex; justify-content: space-between; margin-bottom: 0.6rem; }
+        .data-label { font-weight: 700; color: var(--gray); min-width: 150px; }
+        .data-value { text-align: right; font-weight: 600; }
         
         .footer-link { margin-top: 25px; font-size: 0.85rem; color: var(--gray); }
-        .footer-link a { color: var(--primary); font-weight: bold; text-decoration: none; border-bottom: 1px solid #dce4ec; }
-
-        @media print {
-            @page { margin: 0; size: portrait; }
-            html, body { height: 100%; margin: 0 !important; padding: 0 !important; overflow: hidden; }
-            body { display: block; background: white; }
-            .container { box-shadow: none !important; border: none !important; width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 4rem !important; border-top: 20px solid var(--primary) !important; height: auto; }
-            input, .btn-main, .btn-pdf, .footer-link, .manifesto, .subtitle { display: none !important; }
-            #details { display: block !important; border-top: none; padding-top: 0; }
-            #result { margin-top: 0; font-size: 1.2rem; text-align: left; margin-bottom: 1rem; }
-            h1 { font-size: 2.2rem; text-align: left; }
-            h1::after { content: "Official Succession Certificate of Recordation"; font-size: 0.9rem; color: var(--gray); display: block; font-weight: normal; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
-            .badge-container { justify-content: flex-start; margin-bottom: 35px; }
-        }
+        .footer-link a { color: var(--primary); font-weight: bold; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -67,24 +54,17 @@
     <h1>Transactivate</h1>
     <p class="subtitle">SBIR Succession & Lineage Registry</p>
 
-    <div class="manifesto">
-        <h3>The Two-Key Verification Protocol</h3>
-        <p>Federal "Clean Title" requires two independent locks. We verify both the <strong>Legal Handshake</strong> and the <strong>Official Government Record.</strong></p>
+    <div class="protocol-box">
+        <h3>Registry Standards</h3>
         
-        <div class="legend-section">
-            <span class="legend-label" style="color:var(--warning)">● Key 1: Transaction Integrity (Tiers)</span>
-            <p class="legend-desc">
-                Does a verified paper trail exist between the parties? <br>
-                <em>(Tier 1/2: Dual-Signed; Tier 3: Historical or Self-Reported)</em>
-            </p>
+        <div class="factor-group">
+            <span class="factor-title">Factor 1: Transactional Attestation</span>
+            <p class="factor-desc">Was a legal deal struck between the parties? Tiers 1 and 2 indicate that transactivate brokered the deal or that both parties have formally attested to the transaction.</p>
         </div>
         
-        <div class="legend-section">
-            <span class="legend-label" style="color:var(--blue)">● Key 2: Federal Title Search (Medals)</span>
-            <p class="legend-desc">
-                Does the <strong>Seller</strong> in our ledger match the <strong>Official Awardee</strong> on file with the Government? <br>
-                <strong>🥇 Confirmed:</strong> Lineage is verified and audit-ready for Phase III.
-            </p>
+        <div class="factor-group" style="margin-bottom: 0;">
+            <span class="factor-title">Factor 2: Government Data Match</span>
+            <p class="factor-desc">Does the Seller match the official record? We verify that the Award # and Seller UEI match the data currently held in federal procurement databases.</p>
         </div>
     </div>
     
@@ -93,8 +73,6 @@
     
     <div id="result"></div>
     <div id="details"></div>
-    
-    <button id="pdfBtn" class="btn-pdf" onclick="window.print()">Download Audit Certificate (PDF)</button>
 </div>
 
 <p class="footer-link">
@@ -108,60 +86,66 @@
         const searchValue = document.getElementById('searchField').value.trim();
         const resultDiv = document.getElementById('result');
         const detailsDiv = document.getElementById('details');
-        const pdfBtn = document.getElementById('pdfBtn');
         
         if (!searchValue) return;
 
-        resultDiv.innerHTML = "<span style='color: var(--gray); font-size: 0.9rem;'>Querying Forensic Oracle...</span>";
+        resultDiv.innerHTML = "<span style='color: var(--gray);'>Reconciling with Government Databases...</span>";
         detailsDiv.style.display = "none";
-        pdfBtn.style.display = "none";
 
         try {
             const response = await fetch(`${apiURL}?query=${encodeURIComponent(searchValue)}`);
             const data = await response.json();
 
             if (data.status === "success") {
-                resultDiv.innerHTML = `<span style="color: var(--success);">✔ SUCCESSION VALIDATED</span>`;
+                resultDiv.innerHTML = `<span style="color: var(--success);">✔ RECORD VALIDATED</span>`;
                 detailsDiv.style.display = "block";
-                pdfBtn.style.display = "block";
 
-                // SPLIT THE DUAL BADGE LOGIC
-                const s = data.gov_verified || "Record Logged | 🥉 Sync Pending";
-                let contractPart = s.split('|')[0] ? s.split('|')[0].trim() : "Record Logged";
+                const s = data.gov_verified || "";
                 let govPart = s.split('|')[1] ? s.split('|')[1].trim() : "🥉 Sync Pending";
+
+                // --- AUTHORITATIVE TAKEAWAY LOGIC ---
+                let auditSummary = "This buyer did not win the original Phase I or II, but they are the confirmed winner of the subsequent Phase III. This indicates a verified purchase of technical lineage.";
+                
+                if (data.tier.includes("Tier 1")) {
+                    auditSummary = "transactivate brokered and witnessed the deal between the buyer and the seller. This record represents the highest level of transactional certainty.";
+                } else if (data.tier.includes("Tier 2")) {
+                    auditSummary = "Both the buyer and the seller formally attested that this SBIR transaction occurred. The administrative record is complete.";
+                }
 
                 detailsDiv.innerHTML = `
                     <div class="badge-container">
-                        <span class="badge badge-contract">${contractPart}</span>
+                        <span class="badge badge-contract">${s.split('|')[0] || "Record Logged"}</span>
                         <span class="badge badge-gov">${govPart}</span>
                     </div>
+
+                    <div class="audit-summary">
+                        <span class="audit-title">Registry Finding:</span>
+                        <p class="audit-text">${auditSummary}</p>
+                        <p class="audit-text" style="margin-top:10px; font-weight:bold; border-top: 1px solid #dce4ec; padding-top:10px;">
+                            Verification: We confirmed that the award # and seller UEI match up with official government databases.
+                        </p>
+                    </div>
                     
-                    <div class="data-section">
-                        <span class="section-label">Succession Metadata</span>
+                    <div class="data-section" style="margin-top:25px;">
+                        <span class="section-label">Registry Metadata</span>
                         <div class="data-row"><span class="data-label">Internal Registry ID:</span> <span class="data-value">${data.id}</span></div>
-                        <div class="data-row"><span class="data-label">Award Number:</span> <span class="data-value">${data.award}</span></div>
-                        <div class="data-row"><span class="data-label">Validation Tier:</span> <span class="data-value">${data.tier}</span></div>
                         <div class="data-row"><span class="data-label">Date Ledgered:</span> <span class="data-value">${data.date}</span></div>
+                        <div class="data-row"><span class="data-label">Validation Tier:</span> <span class="data-value">${data.tier}</span></div>
                     </div>
 
                     <div class="data-section">
                         <span class="section-label">Verified Lineage Title</span>
-                        <div class="data-row"><span class="data-label">Assignor (Seller):</span> <span class="data-value">${data.assignor}<br><small style="color:var(--gray)">UEI: ${data.assignor_uei}</small></span></div>
-                        <div class="data-row" style="margin-top:10px;"><span class="data-label">Assignee (Buyer):</span> <span class="data-value">${data.assignee}<br><small style="color:var(--gray)">UEI: ${data.assignee_uei}</small></span></div>
-                    </div>
-
-                    <div class="data-section">
-                        <span class="section-label">Cryptographic Registry Fingerprint</span>
-                        <div class="hash-display">${data.hash}</div>
+                        <div class="data-row"><span class="data-label">Assignor (Seller):</span> <span class="data-value">${data.assignor}</span></div>
+                        <div class="data-row" style="margin-top:8px;"><span class="data-label">Assignee (Buyer):</span> <span class="data-value">${data.assignee}</span></div>
                     </div>
                 `;
             } else {
-                resultDiv.innerHTML = `<span style="color: var(--danger);">✘ RECORD NOT FOUND</span>`;
+                resultDiv.innerHTML = `<span style="color: var(--danger);">✘ NO RECORD FOUND</span>`;
                 detailsDiv.style.display = "block";
-                detailsDiv.innerHTML = `<p style="text-align:center; color: var(--gray); font-size: 0.85rem; line-height: 1.6;">No succession record exists for "<strong>${searchValue}</strong>" in the administrative ledger. Lineage is unverified.</p>`;
+                detailsDiv.innerHTML = `<p style="text-align:center; color: var(--gray); font-size: 0.85rem;">No succession record exists for this award ID. The technical lineage remains unverified.</p>`;
             }
         } catch (err) { 
-            resultDiv.innerHTML = `<span style="color: var(--danger);">REGISTRY OFFLINE</span>`;
+            resultDiv.innerHTML = `<span style="color: var(--danger);">CONNECTION ERROR</span>`;
         }
     }
 </script>
