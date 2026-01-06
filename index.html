@@ -7,18 +7,21 @@
     <style>
         :root { --primary: #2c3e50; --success: #27ae60; --warning: #e67e22; --danger: #e74c3c; --gray: #7f8c8d; --light-bg: #f4f7f6; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--light-bg); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+        
         .container { background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 550px; text-align: center; border-top: 8px solid var(--primary); position: relative; }
+        
         h1 { color: var(--primary); font-size: 1.8rem; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
         .subtitle { color: var(--gray); font-size: 0.95rem; margin-bottom: 2rem; }
         
-        /* --- VERIFICATION LEGEND (MANIFESTO STYLE) --- */
+        /* --- VERIFICATION LEGEND --- */
         .manifesto { text-align: left; background: #f8fafb; border-radius: 8px; padding: 18px; margin-bottom: 25px; border-left: 4px solid var(--primary); }
         .manifesto h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 0; color: var(--primary); }
         .manifesto p { margin: 0; font-size: 0.82rem; color: #34495e; line-height: 1.6; }
         .legend-section { margin-top: 10px; padding-top: 10px; border-top: 1px solid #e0e6ed; }
 
         input { width: 100%; padding: 14px; margin-bottom: 1rem; border: 1px solid #dce4ec; border-radius: 6px; box-sizing: border-box; font-size: 1rem; text-align: center; font-family: monospace; outline-color: var(--primary); }
-        .btn-main { width: 100%; padding: 15px; background-color: var(--primary); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+        .btn-main { width: 100%; padding: 15px; background-color: var(--primary); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .btn-main:hover { background-color: #1a252f; }
         .btn-pdf { display: none; margin-top: 20px; width: 100%; padding: 12px; background-color: white; color: var(--primary); border: 2px solid var(--primary); border-radius: 6px; font-weight: bold; cursor: pointer; }
 
         /* --- DUAL BADGE STYLING --- */
@@ -38,21 +41,21 @@
         .hash-display { background: #f9f9f9; padding: 12px; border: 1px dashed #bdc3c7; border-radius: 4px; font-family: monospace; font-size: 0.7rem; word-break: break-all; color: var(--primary); margin-top: 10px; }
         
         .footer-link { margin-top: 25px; font-size: 0.85rem; color: var(--gray); }
-        .footer-link a { color: var(--primary); font-weight: bold; }
+        .footer-link a { color: var(--primary); font-weight: bold; text-decoration: none; }
 
-        /* --- PDF/PRINT OPTIMIZATION --- */
+        /* --- PRINT/CERTIFICATE OPTIMIZATION --- */
         @media print {
             @page { margin: 0; size: portrait; }
             html, body { height: 100%; margin: 0 !important; padding: 0 !important; overflow: hidden; }
-            body { display: block; }
-            .container { box-shadow: none !important; border: none !important; width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 3rem !important; border-top: 15px solid var(--primary) !important; height: auto; }
+            body { display: block; background: white; }
+            .container { box-shadow: none !important; border: none !important; width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 4rem !important; border-top: 20px solid var(--primary) !important; height: auto; }
             input, .btn-main, .btn-pdf, .footer-link, .manifesto, .subtitle { display: none !important; }
             #details { display: block !important; border-top: none; padding-top: 0; }
-            #result { margin-top: 0; font-size: 1.2rem; }
-            h1 { font-size: 1.6rem; text-align: left; }
-            h1::after { content: "Official Succession Certificate"; font-size: 0.9rem; color: var(--gray); display: block; font-weight: normal; margin-top: 5px; }
-            .data-section { page-break-inside: avoid; margin-bottom: 1.2rem; }
-            .hash-display { border: 1px solid #eee; }
+            #result { margin-top: 0; font-size: 1.2rem; text-align: left; margin-bottom: 1rem; }
+            h1 { font-size: 2rem; text-align: left; }
+            h1::after { content: "Official Succession Certificate of Recordation"; font-size: 0.9rem; color: var(--gray); display: block; font-weight: normal; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
+            .badge-container { justify-content: flex-start; margin-bottom: 30px; }
+            .hash-display { border: 1px solid #eee; background: #fff; }
         }
     </style>
 </head>
@@ -63,17 +66,17 @@
     <p class="subtitle">SBIR Succession & Lineage Registry</p>
 
     <div class="manifesto">
-        <h3>Verification Legend</h3>
+        <h3>Registry Protocol</h3>
         <p><strong>Factor 1: Transactional Proof</strong></p>
-        <p>Tier 1 (Broker-Led), Tier 2 (Two-Party Attestation), or Tier 3 (Self-Reported).</p>
+        <p>Tier 1 (Certified), Tier 2 (Attested), or Tier 3 (Verified Precedent).</p>
         
         <div class="legend-section">
             <p><strong>Factor 2: Federal Title Search</strong></p>
-            <p>🥇 Confirmed (UEI Match), 🥈 Found (Award Match), or 🥉 Syncing (Pending Database Update).</p>
+            <p>🥇 Confirmed (UEI Match), 🥈 Found (Award Match), or 🥉 Syncing.</p>
         </div>
     </div>
     
-    <input type="text" id="searchField" placeholder="Enter SBIR Award Number">
+    <input type="text" id="searchField" placeholder="Enter SBIR Award Number (e.g. N6833525F0126)">
     <button class="btn-main" onclick="verifyRecord()">Verify Ledger Record</button>
     
     <div id="result"></div>
@@ -83,10 +86,11 @@
 </div>
 
 <p class="footer-link">
-    Don't see your record? <a href="https://tally.so/r/kd9VKd" target="_blank">Initiate a New Filing</a>
+    Missing a record? <a href="https://tally.so/r/kd9VKd" target="_blank">Initiate a New Filing</a>
 </p>
 
 <script>
+    // Replace this with your actual Web App URL from Apps Script
     const apiURL = "https://script.google.com/macros/s/AKfycbxqdJ9ignCg3pHamagZwkRExEyPExoHEivYuLjib66MRSeCXKOnXSgHVGPt9Eoxk0jp/exec"; 
 
     async function verifyRecord() {
@@ -97,7 +101,7 @@
         
         if (!searchValue) return;
 
-        resultDiv.innerHTML = "Querying Audit Ledger...";
+        resultDiv.innerHTML = "<span style='color: var(--gray); font-size: 0.9rem;'>Querying Audit Ledger...</span>";
         detailsDiv.style.display = "none";
         pdfBtn.style.display = "none";
 
@@ -110,8 +114,8 @@
                 detailsDiv.style.display = "block";
                 pdfBtn.style.display = "block";
 
-                // Handling the Two-Factor Status
-                const s = data.gov_verified || "Pending Sync";
+                // SPLIT THE DUAL BADGE LOGIC
+                const s = data.gov_verified || "Record Logged | 🥉 Sync Pending";
                 let contractPart = s.split('|')[0] ? s.split('|')[0].trim() : "Record Logged";
                 let govPart = s.split('|')[1] ? s.split('|')[1].trim() : "🥉 Sync Pending";
 
@@ -123,15 +127,16 @@
                     
                     <div class="data-section">
                         <span class="section-label">Succession Metadata</span>
+                        <div class="data-row"><span class="data-label">Internal ID:</span> <span class="data-value">${data.id}</span></div>
                         <div class="data-row"><span class="data-label">Award Number:</span> <span class="data-value">${data.award}</span></div>
-                        <div class="data-row"><span class="data-label">Verification:</span> <span class="data-value" style="font-weight:bold;">Verified</span></div>
+                        <div class="data-row"><span class="data-label">Validation Tier:</span> <span class="data-value">${data.tier}</span></div>
                         <div class="data-row"><span class="data-label">Recorded On:</span> <span class="data-value">${data.date}</span></div>
                     </div>
 
                     <div class="data-section">
                         <span class="section-label">Verified Lineage</span>
-                        <div class="data-row"><span class="data-label">Assignor:</span> <span class="data-value">${data.assignor}<br><small>UEI: ${data.assignor_uei}</small></span></div>
-                        <div class="data-row" style="margin-top:8px;"><span class="data-label">Assignee:</span> <span class="data-value">${data.assignee}<br><small>UEI: ${data.assignee_uei}</small></span></div>
+                        <div class="data-row"><span class="data-label">Assignor:</span> <span class="data-value">${data.assignor}<br><small style="color:var(--gray)">UEI: ${data.assignor_uei}</small></span></div>
+                        <div class="data-row" style="margin-top:10px;"><span class="data-label">Assignee:</span> <span class="data-value">${data.assignee}<br><small style="color:var(--gray)">UEI: ${data.assignee_uei}</small></span></div>
                     </div>
 
                     <div class="data-section">
@@ -142,10 +147,10 @@
             } else {
                 resultDiv.innerHTML = `<span style="color: var(--danger);">✘ RECORD NOT FOUND</span>`;
                 detailsDiv.style.display = "block";
-                detailsDiv.innerHTML = `<p style="text-align:center; color: var(--gray);">No succession record exists for "<strong>${searchValue}</strong>".</p>`;
+                detailsDiv.innerHTML = `<p style="text-align:center; color: var(--gray); font-size: 0.85rem;">No succession record currently exists for "<strong>${searchValue}</strong>" in the administrative ledger.</p>`;
             }
         } catch (err) { 
-            resultDiv.innerHTML = `<span style="color: var(--danger);">CONNECTION ERROR</span>`;
+            resultDiv.innerHTML = `<span style="color: var(--danger);">SYSTEM OFFLINE</span>`;
         }
     }
 </script>
