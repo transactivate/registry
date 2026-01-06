@@ -8,7 +8,7 @@
         :root { --primary: #2c3e50; --success: #27ae60; --warning: #e67e22; --blue: #2b6cb0; --gray: #7f8c8d; --light-bg: #f4f7f6; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--light-bg); display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
         
-        .container { background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 640px; text-align: center; border-top: 8px solid var(--primary); }
+        .container { background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 660px; text-align: center; border-top: 8px solid var(--primary); }
         
         h1 { color: var(--primary); font-size: 1.8rem; margin-bottom: 0.5rem; }
         .subtitle { color: var(--gray); font-size: 0.95rem; margin-bottom: 2rem; }
@@ -17,9 +17,11 @@
         .protocol-box { text-align: left; background: #f8fafb; border-radius: 8px; padding: 24px; margin-bottom: 25px; border: 1px solid #eef2f5; }
         .protocol-box h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 0; color: var(--primary); border-bottom: 2px solid #dce4ec; padding-bottom: 8px; margin-bottom: 15px; }
         
-        .factor-group { margin-bottom: 18px; }
-        .factor-title { font-weight: 800; font-size: 0.95rem; color: #2c3e50; display: block; margin-bottom: 4px; }
-        .factor-desc { font-size: 0.85rem; color: #576574; line-height: 1.5; }
+        .factor-group { margin-bottom: 22px; }
+        .factor-title { font-weight: 800; font-size: 0.95rem; color: #2c3e50; display: block; margin-bottom: 8px; }
+        
+        .tier-definition { background: white; padding: 12px; border-radius: 4px; border-left: 3px solid #dce4ec; margin-bottom: 8px; font-size: 0.82rem; line-height: 1.4; color: #576574; }
+        .tier-definition strong { color: var(--primary); display: block; margin-bottom: 2px; }
 
         input { width: 100%; padding: 16px; margin-bottom: 1rem; border: 2px solid #dce4ec; border-radius: 6px; box-sizing: border-box; font-size: 1rem; text-align: center; font-family: monospace; outline: none; }
         .btn-main { width: 100%; padding: 16px; background-color: var(--primary); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; }
@@ -31,13 +33,13 @@
         .badge-contract { background: #fff8e1; color: #b7791f; border-color: #f6e05e; }
         .badge-gov { background: #ebf8ff; color: #2b6cb0; border-color: #90cdf4; }
 
-        .owner-header { background: #f0f7ff; padding: 20px; border-radius: 8px; border: 1px solid #d0e3ff; margin-bottom: 20px; text-align: center; }
+        .owner-header { background: #f0f7ff; padding: 22px; border-radius: 8px; border: 1px solid #d0e3ff; margin-bottom: 20px; text-align: center; }
         .owner-label { font-size: 0.75rem; color: var(--blue); text-transform: uppercase; font-weight: 800; letter-spacing: 1px; display: block; margin-bottom: 5px; }
-        .owner-name { font-size: 1.3rem; color: var(--primary); font-weight: 800; line-height: 1.2; }
-        .owner-uei { font-family: monospace; font-size: 0.9rem; color: var(--gray); margin-top: 5px; display: block; }
+        .owner-name { font-size: 1.35rem; color: var(--primary); font-weight: 800; line-height: 1.2; }
+        .owner-uei { font-family: monospace; font-size: 0.95rem; color: var(--gray); margin-top: 5px; display: block; }
 
-        .audit-summary { background: #f9f9f9; border-left: 5px solid #bdc3c7; padding: 15px; border-radius: 4px; margin-bottom: 20px; text-align: left; }
-        .audit-text { font-size: 0.85rem; color: #34495e; line-height: 1.5; }
+        .audit-summary { background: #f9f9f9; border-left: 5px solid #bdc3c7; padding: 18px; border-radius: 4px; margin-bottom: 20px; text-align: left; }
+        .audit-text { font-size: 0.88rem; color: #34495e; line-height: 1.5; }
 
         #result { margin-top: 2rem; font-weight: bold; font-size: 1.2rem; }
         #details { margin-top: 1.5rem; text-align: left; font-size: 0.9rem; color: #34495e; border-top: 1px solid #eee; padding-top: 1.5rem; display: none; }
@@ -46,6 +48,7 @@
         .data-row { display: flex; justify-content: space-between; margin-bottom: 0.6rem; }
         .data-label { font-weight: 700; color: var(--gray); min-width: 150px; }
         .data-value { text-align: right; font-weight: 600; }
+        .tier-explanation { font-size: 0.78rem; color: #7f8c8d; font-style: italic; margin-bottom: 12px; display: block; padding: 0 5px; }
         .hash-display { background: #f9f9f9; padding: 12px; border: 1px dashed #bdc3c7; border-radius: 4px; font-family: monospace; font-size: 0.7rem; word-break: break-all; color: var(--primary); margin-top: 10px; }
         
         .footer-link { margin-top: 25px; font-size: 0.85rem; color: var(--gray); }
@@ -71,13 +74,17 @@
 
     <div class="protocol-box">
         <h3>Registry Standards</h3>
+        
         <div class="factor-group">
             <span class="factor-title">Factor 1: Transactional Attestation</span>
-            <p class="factor-desc">Was a legal deal struck? Tiers 1 and 2 indicate transactivate brokered the deal or both parties formally attested to the transaction.</p>
+            <div class="tier-definition"><strong>Tier 1: Certified Recordation</strong> transactivate brokered and witnessed the legal deal between parties.</div>
+            <div class="tier-definition"><strong>Tier 2: Dual Attestation</strong> Both the buyer and the seller have formally attested to the transaction.</div>
+            <div class="tier-definition"><strong>Tier 3: Verification of Precedent</strong> Forensic research verifying historical successions (Phase III award without prior Phase I/II win) or single-party attestation.</div>
         </div>
+        
         <div class="factor-group" style="margin-bottom: 0;">
             <span class="factor-title">Factor 2: Government Data Match</span>
-            <p class="factor-desc">Does the Seller match the official record? We verify that the Award # and Seller UEI match federal procurement databases.</p>
+            <p style="font-size: 0.85rem; color: #576574; line-height: 1.5; margin: 0;">Does the Seller match the official record? We verify that the Award # and Seller UEI match federal procurement databases.</p>
         </div>
     </div>
     
@@ -105,7 +112,7 @@
         
         if (!searchValue) return;
 
-        resultDiv.innerHTML = "<span style='color: var(--gray);'>Querying Audit Ledger...</span>";
+        resultDiv.innerHTML = "<span style='color: var(--gray);'>Running Forensic Audit...</span>";
         detailsDiv.style.display = "none";
         pdfBtn.style.display = "none";
 
@@ -121,9 +128,22 @@
                 const s = data.gov_verified || "";
                 let govPart = s.split('|')[1] ? s.split('|')[1].trim() : "🥉 Sync Pending";
 
+                // --- DYNAMIC AUDIT SUMMARY & TIER EXPLANATIONS ---
                 let auditSummary = "This buyer did not win the original Phase I or II, but is the confirmed winner of the subsequent Phase III. This indicates a verified purchase of technical lineage.";
-                if (data.tier.includes("Tier 1")) { auditSummary = "transactivate brokered and witnessed the deal between the buyer and the seller."; }
-                else if (data.tier.includes("Tier 2")) { auditSummary = "Both the buyer and the seller formally attested that this SBIR transaction occurred."; }
+                let tierDetail = "Verified via forensic research: Phase III win with no prior Phase I/II history.";
+                
+                if (data.tier.includes("Tier 1")) { 
+                    auditSummary = "transactivate brokered and witnessed the deal between the buyer and the seller."; 
+                    tierDetail = "This deal was directly brokered and witnessed by transactivate.";
+                }
+                else if (data.tier.includes("Tier 2")) { 
+                    auditSummary = "Both the buyer and the seller formally attested that this SBIR transaction occurred."; 
+                    tierDetail = "Both parties have formally ledgered this transaction on the registry.";
+                }
+                else if (data.tier.includes("Single-Party")) {
+                    auditSummary = "A single party has attested to this transaction. Full dual-attestation is pending.";
+                    tierDetail = "Only one party involved in the deal has attested to this transaction.";
+                }
 
                 detailsDiv.innerHTML = `
                     <div class="badge-container">
@@ -139,13 +159,14 @@
 
                     <div class="audit-summary">
                         <p class="audit-text"><strong>Registry Finding:</strong> ${auditSummary}</p>
-                        <p class="audit-text" style="margin-top:8px; font-size:0.8rem; font-style:italic;">We confirmed that the award # and seller UEI match official government databases.</p>
+                        <p class="audit-text" style="margin-top:8px; font-size:0.8rem; font-style:italic;">Verification: Award # and Seller UEI match official government databases.</p>
                     </div>
                     
                     <div class="data-section">
                         <span class="section-label">Registry Metadata</span>
                         <div class="data-row"><span class="data-label">Federal Award ID:</span> <span class="data-value">${data.award}</span></div>
                         <div class="data-row"><span class="data-label">Validation Tier:</span> <span class="data-value">${data.tier}</span></div>
+                        <span class="tier-explanation">Audit Level: ${tierDetail}</span>
                         <div class="data-row"><span class="data-label">Date Ledgered:</span> <span class="data-value">${data.date}</span></div>
                     </div>
 
