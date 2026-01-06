@@ -5,27 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transactivate | SBIR Lineage Registry</title>
     <style>
-        :root { --primary: #2c3e50; --success: #27ae60; --warning: #e67e22; --danger: #e74c3c; --gray: #7f8c8d; --light-bg: #f4f7f6; }
+        :root { --primary: #2c3e50; --success: #27ae60; --warning: #e67e22; --blue: #2b6cb0; --gray: #7f8c8d; --light-bg: #f4f7f6; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--light-bg); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
-        .container { background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 550px; text-align: center; border-top: 8px solid var(--primary); position: relative; }
+        
+        .container { background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 580px; text-align: center; border-top: 8px solid var(--primary); position: relative; }
+        
         h1 { color: var(--primary); font-size: 1.8rem; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
         .subtitle { color: var(--gray); font-size: 0.95rem; margin-bottom: 2rem; }
         
-        /* --- PROTOCOL MANIFESTO (THE "WHY") --- */
-        .manifesto { text-align: left; background: #f8fafb; border-radius: 8px; padding: 20px; margin-bottom: 25px; border-left: 4px solid var(--primary); }
+        /* --- TWO-KEY PROTOCOL MANIFESTO --- */
+        .manifesto { text-align: left; background: #f8fafb; border-radius: 8px; padding: 22px; margin-bottom: 25px; border-left: 4px solid var(--primary); }
         .manifesto h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 0; color: var(--primary); margin-bottom: 12px; }
-        .manifesto p { margin: 0 0 12px 0; font-size: 0.82rem; color: #34495e; line-height: 1.5; }
-        .manifesto strong { color: var(--primary); }
-        .legend-section { margin-top: 10px; padding-top: 10px; border-top: 1px solid #e0e6ed; }
+        .manifesto p { margin: 0 0 12px 0; font-size: 0.88rem; color: #34495e; line-height: 1.5; }
+        .legend-section { margin-top: 15px; padding-top: 12px; border-top: 1px solid #e0e6ed; }
+        .legend-label { font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+        .legend-desc { font-size: 0.78rem; color: #7f8c8d; margin-left: 22px; line-height: 1.4; }
 
-        input { width: 100%; padding: 14px; margin-bottom: 1rem; border: 1px solid #dce4ec; border-radius: 6px; box-sizing: border-box; font-size: 1rem; text-align: center; font-family: monospace; outline-color: var(--primary); }
-        .btn-main { width: 100%; padding: 15px; background-color: var(--primary); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
-        .btn-main:hover { background-color: #1a252f; }
+        input { width: 100%; padding: 16px; margin-bottom: 1rem; border: 2px solid #dce4ec; border-radius: 6px; box-sizing: border-box; font-size: 1.1rem; text-align: center; font-family: monospace; outline: none; transition: border-color 0.2s; }
+        input:focus { border-color: var(--primary); }
+        
+        .btn-main { width: 100%; padding: 16px; background-color: var(--primary); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn-main:hover { background-color: #1a252f; transform: translateY(-1px); }
         .btn-pdf { display: none; margin-top: 20px; width: 100%; padding: 12px; background-color: white; color: var(--primary); border: 2px solid var(--primary); border-radius: 6px; font-weight: bold; cursor: pointer; }
 
         /* --- DUAL BADGE STYLING --- */
-        .badge-container { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; }
-        .badge { padding: 6px 14px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; border: 1px solid transparent; }
+        .badge-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .badge { padding: 8px 16px; border-radius: 4px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; border: 1px solid transparent; letter-spacing: 0.5px; }
         .badge-contract { background: #fff8e1; color: #b7791f; border-color: #f6e05e; }
         .badge-gov { background: #ebf8ff; color: #2b6cb0; border-color: #90cdf4; }
 
@@ -35,12 +40,12 @@
         .data-section { margin-bottom: 1.5rem; }
         .section-label { font-size: 0.75rem; color: var(--gray); text-transform: uppercase; letter-spacing: 1.2px; display: block; border-bottom: 1px solid #f1f1f1; padding-bottom: 5px; margin-bottom: 10px; }
         .data-row { display: flex; justify-content: space-between; margin-bottom: 0.6rem; gap: 10px; }
-        .data-label { font-weight: 700; color: var(--gray); min-width: 130px; }
-        .data-value { text-align: right; word-break: break-word; }
-        .hash-display { background: #f9f9f9; padding: 12px; border: 1px dashed #bdc3c7; border-radius: 4px; font-family: monospace; font-size: 0.7rem; word-break: break-all; color: var(--primary); margin-top: 10px; }
+        .data-label { font-weight: 700; color: var(--gray); min-width: 140px; }
+        .data-value { text-align: right; word-break: break-word; font-weight: 500; }
+        .hash-display { background: #f9f9f9; padding: 14px; border: 1px dashed #bdc3c7; border-radius: 4px; font-family: monospace; font-size: 0.7rem; word-break: break-all; color: var(--primary); margin-top: 10px; line-height: 1.4; }
         
         .footer-link { margin-top: 25px; font-size: 0.85rem; color: var(--gray); }
-        .footer-link a { color: var(--primary); font-weight: bold; text-decoration: none; }
+        .footer-link a { color: var(--primary); font-weight: bold; text-decoration: none; border-bottom: 1px solid #dce4ec; }
 
         @media print {
             @page { margin: 0; size: portrait; }
@@ -50,9 +55,9 @@
             input, .btn-main, .btn-pdf, .footer-link, .manifesto, .subtitle { display: none !important; }
             #details { display: block !important; border-top: none; padding-top: 0; }
             #result { margin-top: 0; font-size: 1.2rem; text-align: left; margin-bottom: 1rem; }
-            h1 { font-size: 2rem; text-align: left; }
+            h1 { font-size: 2.2rem; text-align: left; }
             h1::after { content: "Official Succession Certificate of Recordation"; font-size: 0.9rem; color: var(--gray); display: block; font-weight: normal; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
-            .badge-container { justify-content: flex-start; margin-bottom: 30px; }
+            .badge-container { justify-content: flex-start; margin-bottom: 35px; }
         }
     </style>
 </head>
@@ -63,36 +68,40 @@
     <p class="subtitle">SBIR Succession & Lineage Registry</p>
 
     <div class="manifesto">
-        <h3>Registry Protocol</h3>
-        <p>This ledger establishes <strong>"Clean Title"</strong> for federal technical assets, ensuring lineage is audit-ready for non-competitive Phase III awards.</p>
+        <h3>The Two-Key Verification Protocol</h3>
+        <p>Federal "Clean Title" requires two independent locks. We verify both the <strong>Legal Handshake</strong> and the <strong>Official Government Record.</strong></p>
         
         <div class="legend-section">
-            <p><strong>Factor 1: Transactional Integrity</strong></p>
-            <p><strong>Tier 1/2:</strong> Proof of legal transfer between parties. Prevents "Lineage Squatting."</p>
-            <p><strong>Tier 3:</strong> Verified Market Precedents. Proves historical agency acceptance of the transfer.</p>
+            <span class="legend-label" style="color:var(--warning)">● Key 1: Transaction Integrity (Tiers)</span>
+            <p class="legend-desc">
+                Does a verified paper trail exist between the parties? <br>
+                <em>(Tier 1/2: Dual-Signed; Tier 3: Historical or Self-Reported)</em>
+            </p>
         </div>
         
         <div class="legend-section">
-            <p><strong>Factor 2: Federal Title Search</strong></p>
-            <p><strong>🥇 Confirmed:</strong> Award ID and Assignee UEI are a confirmed match in federal systems. This provides the primary <strong>Administrative Record</strong> required for sole-source justification.</p>
+            <span class="legend-label" style="color:var(--blue)">● Key 2: Federal Title Search (Medals)</span>
+            <p class="legend-desc">
+                Does the <strong>Seller</strong> in our ledger match the <strong>Official Awardee</strong> on file with the Government? <br>
+                <strong>🥇 Confirmed:</strong> Lineage is verified and audit-ready for Phase III.
+            </p>
         </div>
     </div>
     
-    <input type="text" id="searchField" placeholder="Enter SBIR Award Number">
-    <button class="btn-main" onclick="verifyRecord()">Verify Ledger Record</button>
+    <input type="text" id="searchField" placeholder="Enter SBIR Award ID (e.g. N6833525F0126)">
+    <button class="btn-main" onclick="verifyRecord()">Verify Registry Record</button>
     
     <div id="result"></div>
     <div id="details"></div>
     
-    <button id="pdfBtn" class="btn-pdf" onclick="window.print()">Download Certificate (PDF)</button>
+    <button id="pdfBtn" class="btn-pdf" onclick="window.print()">Download Audit Certificate (PDF)</button>
 </div>
 
 <p class="footer-link">
-    Missing a record? <a href="https://tally.so/r/kd9VKd" target="_blank">Initiate a New Filing</a>
+    Don't see your record? <a href="https://tally.so/r/kd9VKd" target="_blank">Initiate a New Filing</a>
 </p>
 
 <script>
-    // UPDATED WEB APP URL
     const apiURL = "https://script.google.com/macros/s/AKfycbxqdJ9ignCg3pHamagZwkRExEyPExoHEivYuLjib66MRSeCXKOnXSgHVGPt9Eoxk0jp/exec"; 
 
     async function verifyRecord() {
@@ -103,7 +112,7 @@
         
         if (!searchValue) return;
 
-        resultDiv.innerHTML = "<span style='color: var(--gray); font-size: 0.9rem;'>Querying Audit Ledger...</span>";
+        resultDiv.innerHTML = "<span style='color: var(--gray); font-size: 0.9rem;'>Querying Forensic Oracle...</span>";
         detailsDiv.style.display = "none";
         pdfBtn.style.display = "none";
 
@@ -112,7 +121,7 @@
             const data = await response.json();
 
             if (data.status === "success") {
-                resultDiv.innerHTML = `<span style="color: var(--success);">✔ RECORD VALIDATED</span>`;
+                resultDiv.innerHTML = `<span style="color: var(--success);">✔ SUCCESSION VALIDATED</span>`;
                 detailsDiv.style.display = "block";
                 pdfBtn.style.display = "block";
 
@@ -129,30 +138,30 @@
                     
                     <div class="data-section">
                         <span class="section-label">Succession Metadata</span>
-                        <div class="data-row"><span class="data-label">Internal ID:</span> <span class="data-value">${data.id}</span></div>
+                        <div class="data-row"><span class="data-label">Internal Registry ID:</span> <span class="data-value">${data.id}</span></div>
                         <div class="data-row"><span class="data-label">Award Number:</span> <span class="data-value">${data.award}</span></div>
                         <div class="data-row"><span class="data-label">Validation Tier:</span> <span class="data-value">${data.tier}</span></div>
-                        <div class="data-row"><span class="data-label">Recorded On:</span> <span class="data-value">${data.date}</span></div>
+                        <div class="data-row"><span class="data-label">Date Ledgered:</span> <span class="data-value">${data.date}</span></div>
                     </div>
 
                     <div class="data-section">
-                        <span class="section-label">Verified Lineage</span>
-                        <div class="data-row"><span class="data-label">Assignor:</span> <span class="data-value">${data.assignor}<br><small style="color:var(--gray)">UEI: ${data.assignor_uei}</small></span></div>
-                        <div class="data-row" style="margin-top:10px;"><span class="data-label">Assignee:</span> <span class="data-value">${data.assignee}<br><small style="color:var(--gray)">UEI: ${data.assignee_uei}</small></span></div>
+                        <span class="section-label">Verified Lineage Title</span>
+                        <div class="data-row"><span class="data-label">Assignor (Seller):</span> <span class="data-value">${data.assignor}<br><small style="color:var(--gray)">UEI: ${data.assignor_uei}</small></span></div>
+                        <div class="data-row" style="margin-top:10px;"><span class="data-label">Assignee (Buyer):</span> <span class="data-value">${data.assignee}<br><small style="color:var(--gray)">UEI: ${data.assignee_uei}</small></span></div>
                     </div>
 
                     <div class="data-section">
-                        <span class="section-label">Registry Fingerprint</span>
+                        <span class="section-label">Cryptographic Registry Fingerprint</span>
                         <div class="hash-display">${data.hash}</div>
                     </div>
                 `;
             } else {
                 resultDiv.innerHTML = `<span style="color: var(--danger);">✘ RECORD NOT FOUND</span>`;
                 detailsDiv.style.display = "block";
-                detailsDiv.innerHTML = `<p style="text-align:center; color: var(--gray); font-size: 0.85rem;">No succession record exists for "<strong>${searchValue}</strong>".</p>`;
+                detailsDiv.innerHTML = `<p style="text-align:center; color: var(--gray); font-size: 0.85rem; line-height: 1.6;">No succession record exists for "<strong>${searchValue}</strong>" in the administrative ledger. Lineage is unverified.</p>`;
             }
         } catch (err) { 
-            resultDiv.innerHTML = `<span style="color: var(--danger);">SYSTEM OFFLINE</span>`;
+            resultDiv.innerHTML = `<span style="color: var(--danger);">REGISTRY OFFLINE</span>`;
         }
     }
 </script>
