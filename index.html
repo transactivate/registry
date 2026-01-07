@@ -122,12 +122,11 @@
                 let tierExp = "";
                 let displayTier = data.tier;
                 
-                // --- THE INSTITUTIONAL FIX ---
-                // Priority Check: If it is a forensic precedent, lock it in first.
+                // --- THE FORENSIC REASONING FIX ---
                 if (data.tier === "Verified Precedent" || data.gov_verified === "Verified Precedent") {
                     displayTier = "Verified Precedent";
-                    auditText = "This record represents a forensic technical lineage match. The current owner is the confirmed winner of a subsequent Phase III follow-on contract, providing objective evidence of a historical technical purchase.";
-                    tierExp = "Verified Precedent: Lineage proven by historical government contract and succession data.";
+                    auditText = "This record represents a forensic technical lineage match. The current owner is the confirmed winner of a subsequent Phase III follow-on contract despite having no corresponding Phase I or II for this topic in their own name. This provides objective evidence of a historical purchase of technical data rights from a legacy awardee.";
+                    tierExp = "Verified Precedent: Lineage proven by historical government contract data and the absence of original Phase I/II awards for the successor.";
                 } 
                 else if (data.tier.includes("Tier 1")) {
                     auditText = "transactivate brokered and witnessed the deal between the buyer and the seller. This represents the highest level of transactional certainty.";
