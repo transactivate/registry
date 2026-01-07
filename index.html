@@ -79,7 +79,7 @@
         </div>
         <div class="factor-group" style="margin-bottom: 0;">
             <span class="factor-title">Factor 2: Government Data Match</span>
-            <p style="font-size: 0.85rem; color: #5b616b; line-height: 1.6; margin: 0;">We confirm that the Award # and Seller UEI match the records held in official federal databases.</p>
+            <p style="font-size: 0.85rem; color: #5b616b; line-height: 1.6; margin: 0;">We confirm that the Award # and UEI match the records held in official federal databases.</p>
         </div>
     </div>
     
@@ -122,7 +122,6 @@
                 let tierExp = "";
                 let displayTier = data.tier;
                 
-                // --- THE FORENSIC REASONING FIX ---
                 if (data.tier === "Verified Precedent" || data.gov_verified === "Verified Precedent") {
                     displayTier = "Verified Precedent";
                     auditText = "This record represents a forensic technical lineage match. The current owner is the confirmed winner of a subsequent Phase III follow-on contract despite having no corresponding Phase I or II for this topic in their own name. This provides objective evidence of a historical purchase of technical data rights from a legacy awardee.";
@@ -151,7 +150,7 @@
                         <p class="audit-text"><strong>Registry Finding:</strong> ${auditText}</p>
                         <div class="verification-line">
                             <span class="check-mark">✔</span> 
-                            Verification: Award # and Seller UEI match official government databases.
+                            Verification: Award # and UEI match official government databases.
                         </div>
                     </div>
                     
