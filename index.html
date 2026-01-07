@@ -25,7 +25,6 @@
         .btn-main { width: 100%; padding: 16px; background-color: var(--blue); color: white; border: none; border-radius: 3px; font-size: 1.1rem; font-weight: 700; cursor: pointer; text-transform: uppercase; }
         .btn-main:hover { background-color: #1a4480; }
         
-        /* --- OPTIMIZED RESULT SPACING --- */
         #result { margin-top: 1.75rem; font-weight: bold; font-size: 1.25rem; }
         #details { margin-top: 1.75rem; text-align: left; font-size: 0.95rem; border-top: 1px solid #dfe1e2; padding-top: 2rem; display: none; }
 
@@ -123,19 +122,21 @@
                 let tierExp = "";
                 let displayTier = data.tier;
                 
-                const isPrecedent = (data.tier.includes("Tier 3") && data.assignor.includes("Protected Legacy"));
-                
-                if (isPrecedent) {
+                // --- THE INSTITUTIONAL FIX ---
+                // Priority Check: If it is a forensic precedent, lock it in first.
+                if (data.tier === "Verified Precedent" || data.gov_verified === "Verified Precedent") {
                     displayTier = "Verified Precedent";
-                    auditText = "This buyer did not win the original Phase I or II, but is the confirmed winner of the subsequent Phase III. This indicates a verified purchase of technical lineage proven by historical government contract data.";
-                    tierExp = "Verified Precedent: Lineage proven by historical government contract data.";
-                } else if (data.tier.includes("Tier 1")) {
+                    auditText = "This record represents a forensic technical lineage match. The current owner is the confirmed winner of a subsequent Phase III follow-on contract, providing objective evidence of a historical technical purchase.";
+                    tierExp = "Verified Precedent: Lineage proven by historical government contract and succession data.";
+                } 
+                else if (data.tier.includes("Tier 1")) {
                     auditText = "transactivate brokered and witnessed the deal between the buyer and the seller. This represents the highest level of transactional certainty.";
                     tierExp = "Verified via Transactivate Brokerage: Deal witnessed by a neutral third party.";
                 } else if (data.tier.includes("Tier 2")) {
                     auditText = "Both the buyer and the seller formally attested that this SBIR transaction occurred. The administrative record is complete.";
                     tierExp = "Dual Attestation: Both parties have formally ledgered this transaction.";
                 } else {
+                    displayTier = "Tier 3: Single Attestation";
                     auditText = "A single party has attested to this transaction. Full dual-attestation is required to reach Tier 2 status.";
                     tierExp = "Single Attestation: Only one party has formally logged this transaction.";
                 }
@@ -174,11 +175,11 @@
                     </div>
                 `;
             } else {
-                resultDiv.innerHTML = `<span style="color: var(--danger);">✘ NO RECORD FOUND</span>`;
+                resultDiv.innerHTML = `<span style="color: #d32f2f;">✘ NO RECORD FOUND</span>`;
                 detailsDiv.style.display = "block";
                 detailsDiv.innerHTML = `<p style="text-align:center; color: var(--gray); font-size: 0.9rem; margin-top:20px;">No succession record exists for this award ID in the registry.</p>`;
             }
-        } catch (err) { resultDiv.innerHTML = `<span style="color: var(--danger);">REGISTRY OFFLINE</span>`; }
+        } catch (err) { resultDiv.innerHTML = `<span style="color: #d32f2f;">REGISTRY OFFLINE</span>`; }
     }
 </script>
 </body>
