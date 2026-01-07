@@ -25,22 +25,19 @@
         .btn-main { width: 100%; padding: 16px; background-color: var(--blue); color: white; border: none; border-radius: 3px; font-size: 1.1rem; font-weight: 700; cursor: pointer; text-transform: uppercase; margin-bottom: 10px; }
         .btn-main:hover { background-color: #1a4480; }
         
-        /* --- SEARCH RESULT SPACING & ALIGNMENT --- */
+        /* --- SEARCH RESULT SPACING --- */
         #result { margin-top: 3rem; font-weight: bold; font-size: 1.25rem; padding-bottom: 15px; }
         #details { margin-top: 2rem; text-align: left; font-size: 0.95rem; border-top: 1px solid #dfe1e2; padding-top: 3rem; display: none; }
-
-        .badge-container { display: flex; justify-content: center; align-items: center; gap: 12px; margin-bottom: 30px; }
-        .badge { display: inline-flex; align-items: center; justify-content: center; padding: 8px 16px; border-radius: 2px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; height: 32px; box-sizing: border-box; }
-        .badge-contract { background: #fff1d2; color: #8e7032; border: 1px solid #f9c642; }
-        .badge-gov { background: #e1f3f8; color: #0050d8; border: 1px solid #00aef1; }
 
         .owner-header { background: #e7f3ff; padding: 24px; border: 1px solid #71b5ff; margin-bottom: 30px; text-align: center; }
         .owner-label { font-size: 0.8rem; color: var(--blue); text-transform: uppercase; font-weight: 700; letter-spacing: 1px; display: block; margin-bottom: 8px; }
         .owner-name { font-size: 1.5rem; color: var(--primary); font-weight: 800; line-height: 1.2; display: block; }
         .owner-uei { font-family: monospace; font-size: 1rem; color: #1b1b1b; margin-top: 8px; display: block; font-weight: 600; }
 
-        .audit-summary { background: #f0f0f0; border-left: 6px solid var(--primary); padding: 20px; margin-bottom: 30px; text-align: left; }
+        .audit-summary { background: #f0f0f0; border-left: 6px solid var(--primary); padding: 20px; margin-bottom: 35px; text-align: left; }
         .audit-text { font-size: 0.95rem; line-height: 1.6; color: #1b1b1b; }
+        .verification-line { margin-top: 12px; font-weight: 700; border-top: 1px solid #d6d7d9; padding-top: 12px; font-size: 0.85rem; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+        .check-mark { color: var(--success); font-size: 1.1rem; }
 
         .data-section { margin-bottom: 3rem; }
         .section-label { font-size: 0.8rem; color: var(--gray); text-transform: uppercase; letter-spacing: 2px; display: block; border-bottom: 2px solid #efefef; padding-bottom: 10px; margin-bottom: 15px; font-weight: 700; }
@@ -122,14 +119,10 @@
                 detailsDiv.style.display = "block";
                 pdfBtn.style.display = "block";
 
-                const s = data.gov_verified || "";
-                let govPart = s.split('|')[1] ? s.split('|')[1].trim() : "🥉 Sync Pending";
-
                 let auditText = "";
                 let tierExp = "";
                 let displayTier = data.tier;
                 
-                // --- FIX: DECOUPLE HISTORICAL DATA FROM TIER 3 ---
                 const isPrecedent = (data.tier.includes("Tier 3") && data.assignor.includes("Protected Legacy"));
                 
                 if (isPrecedent) {
@@ -148,11 +141,6 @@
                 }
 
                 detailsDiv.innerHTML = `
-                    <div class="badge-container">
-                        <span class="badge badge-contract">${s.split('|')[0] || "Record Logged"}</span>
-                        <span class="badge badge-gov">${govPart}</span>
-                    </div>
-
                     <div class="owner-header">
                         <span class="owner-label">Verified Successor (Current Owner)</span>
                         <span class="owner-name">${data.assignee}</span>
@@ -161,7 +149,10 @@
 
                     <div class="audit-summary">
                         <p class="audit-text"><strong>Registry Finding:</strong> ${auditText}</p>
-                        <p class="audit-text" style="margin-top:10px; font-weight:700; border-top:1px solid #d6d7d9; padding-top:10px; font-size:0.85rem;">Verification: Award # and Seller UEI match official government databases.</p>
+                        <div class="verification-line">
+                            <span class="check-mark">✔</span> 
+                            Verification: Award # and Seller UEI match official government databases.
+                        </div>
                     </div>
                     
                     <div class="data-section">
